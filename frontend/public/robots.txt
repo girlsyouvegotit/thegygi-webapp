@@ -1,0 +1,30 @@
+# GYGI — Girls You've Got It
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /blog
+Allow: /explore
+Allow: /register
+Allow: /login
+
+# Private app shells
+Disallow: /dashboard
+Disallow: /my-learning
+Disallow: /community
+Disallow: /live-classes
+Disallow: /live-class/
+Disallow: /recordings
+Disallow: /quizzes
+Disallow: /assignments
+Disallow: /mentorship
+Disallow: /progress
+Disallow: /certificates
+Disallow: /calendar
+Disallow: /profile
+Disallow: /writer/
+Disallow: /tutor/
+Disallow: /mentor/
+Disallow: /admin/
+Disallow: /super-admin/
+
+Sitemap: https://girlsyougotit.org/sitemap.xml
