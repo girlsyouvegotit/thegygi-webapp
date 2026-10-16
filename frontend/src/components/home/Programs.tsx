@@ -125,23 +125,26 @@ const programs: Program[] = [
 
 const Programs = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollLock = useRef(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
 
-  const cardWidth = 240;
   const totalSlides = programs.length;
 
   const scrollToIndex = useCallback(
     (index: number) => {
-      if (scrollRef.current) {
-        const clampedIndex = Math.max(0, Math.min(index, totalSlides - 1));
-        const scrollPosition = clampedIndex * cardWidth - cardWidth;
-        scrollRef.current.scrollTo({
-          left: scrollPosition,
-          behavior: "smooth",
-        });
-        setActiveIndex(clampedIndex);
-      }
+      const track = scrollRef.current;
+      if (!track) return;
+      const clampedIndex = Math.max(0, Math.min(index, totalSlides - 1));
+      const card = track.children[clampedIndex] as HTMLElement | undefined;
+      if (!card) return;
+      scrollLock.current = true;
+      const left = card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2;
+      track.scrollTo({ left, behavior: "smooth" });
+      setActiveIndex(clampedIndex);
+      window.setTimeout(() => {
+        scrollLock.current = false;
+      }, 500);
     },
     [totalSlides],
   );
@@ -155,12 +158,21 @@ const Programs = () => {
   }, [activeIndex, scrollToIndex]);
 
   const handleScroll = () => {
-    if (scrollRef.current) {
-      const scrollLeft = scrollRef.current.scrollLeft;
-      const index = Math.round((scrollLeft + cardWidth) / cardWidth);
-      const clampedIndex = Math.max(0, Math.min(index, totalSlides - 1));
-      setActiveIndex(clampedIndex);
-    }
+    const track = scrollRef.current;
+    if (!track || scrollLock.current) return;
+    const center = track.scrollLeft + track.clientWidth / 2;
+    let closest = 0;
+    let best = Number.POSITIVE_INFINITY;
+    Array.from(track.children).forEach((child, index) => {
+      const card = child as HTMLElement;
+      const mid = card.offsetLeft + card.offsetWidth / 2;
+      const distance = Math.abs(mid - center);
+      if (distance < best) {
+        best = distance;
+        closest = index;
+      }
+    });
+    setActiveIndex((current) => (current === closest ? current : closest));
   };
 
   const current = programs[activeIndex];
@@ -181,10 +193,7 @@ const Programs = () => {
       />
 
       {/* Ambient glow */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[40vh] rounded-full blur-[120px] pointer-events-none transition-all duration-700"
-        style={{ background: `${current.accent}08` }}
-      />
+      <div className="pointer-events-none absolute top-1/2 left-1/2 h-[40vh] w-[60vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.04] blur-[120px]" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
         {/* HEADER */}
@@ -238,10 +247,10 @@ const Programs = () => {
                     setActiveIndex(idx);
                     setSelectedProgram(program);
                   }}
-                  className={`flex-shrink-0 snap-center transition-all duration-500 ease-out rounded-2xl overflow-hidden relative cursor-pointer ${
+                  className={`relative h-[300px] w-[210px] flex-shrink-0 origin-center cursor-pointer snap-center overflow-hidden rounded-2xl transition-transform duration-300 ease-out ${
                     isActive
-                      ? "w-[230px] h-[330px] scale-100 z-20 shadow-2xl"
-                      : "w-[200px] h-[290px] scale-90 z-10 opacity-60"
+                      ? "z-20 scale-105 shadow-2xl"
+                      : "z-10 scale-95 opacity-70"
                   }`}
                   style={{
                     boxShadow: isActive
