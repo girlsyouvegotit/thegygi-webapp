@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Loader2, ArrowLeft, Clock, Calendar, Video, Radio, Users, CircleDot } from "lucide-react";
 import { useAuth } from "@/hooks/useAuthContext";
 import { api } from "@/lib/api";
+import { readAccessToken } from "@/lib/session";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import VideoGrid from "./VideoGrid";
@@ -261,11 +262,7 @@ const LiveClassroom = () => {
     const sessionId = state.liveClass.sessionId;
     if (!sessionId) return;
 
-    const token =
-      document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("jwt="))
-        ?.split("=")[1] || undefined;
+    const token = readAccessToken() || undefined;
 
     const newSocket = io(
       import.meta.env.VITE_SOCKET_URL || "http://localhost:5000",
@@ -712,6 +709,10 @@ const LiveClassroom = () => {
           xhr.open("POST", `${base}/classes/${classId}/recording/upload`);
           xhr.withCredentials = true;
           xhr.timeout = 180000;
+          const accessToken = readAccessToken();
+          if (accessToken) {
+            xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`);
+          }
           xhr.setRequestHeader("Content-Type", headerMime);
           xhr.setRequestHeader("X-File-Name", filename);
           if (durationSeconds > 0) {

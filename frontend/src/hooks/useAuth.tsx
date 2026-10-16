@@ -10,6 +10,11 @@ import {
   stopActAs,
   writeImpersonationSession,
 } from "@/lib/impersonation";
+import {
+  clearAccessToken,
+  extractAccessToken,
+  writeAccessToken,
+} from "@/lib/session";
 
 const VALID_ROLES: UserRole[] = [
   "student",
@@ -202,6 +207,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       clearImpersonationSession();
       setImpersonation(null);
       const { data } = await api.post("/auth/login", { email, password });
+      const token = extractAccessToken(data);
+      if (token) writeAccessToken(token);
       const userData = extractUser(data);
       if (!userData) {
         throw new Error("Login succeeded but user profile was invalid");
@@ -228,6 +235,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         password,
         categoryId,
       });
+      const token = extractAccessToken(data);
+      if (token) writeAccessToken(token);
       const userData = extractUser(data);
       if (!userData) {
         throw new Error("Registration succeeded but user profile was invalid");
@@ -251,6 +260,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // Silently handle logout errors
     } finally {
+      clearAccessToken();
       clearImpersonationSession();
       setImpersonation(null);
       setUser(null);

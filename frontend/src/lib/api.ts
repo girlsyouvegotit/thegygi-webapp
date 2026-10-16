@@ -1,4 +1,5 @@
 import axios from "axios";
+import { clearAccessToken, readAccessToken } from "@/lib/session";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api",
@@ -11,6 +12,10 @@ export const api = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
+    const token = readAccessToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
@@ -25,6 +30,7 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401) {
+      clearAccessToken();
       const path = window.location.pathname || "";
       const publicPath =
         path === "/login" ||

@@ -1,4 +1,5 @@
 import { generateReactHelpers } from "@uploadthing/react";
+import { readAccessToken } from "@/lib/session";
 
 /**
  * UploadThing React helpers.
@@ -40,6 +41,12 @@ export const uploadThingFetch = (
   headers.delete("baggage");
 
   const toOurApi = isOurUploadThingApi(input);
+  if (toOurApi) {
+    const token = readAccessToken();
+    if (token && !headers.has("Authorization")) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
+  }
   return fetch(input, {
     ...init,
     headers,

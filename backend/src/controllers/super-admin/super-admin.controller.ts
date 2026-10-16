@@ -323,6 +323,7 @@ export const startImpersonation = asyncHandler(
           role: req.user!.role,
         },
         home,
+        accessToken: token,
         watermark: `ACTING AS ${target.role.toUpperCase()}`,
         impersonation: {
           active: true,

@@ -10,8 +10,14 @@ export const generateToken = (userId: string, res: Response) => {
   // attach token to http-only cookie
   res.cookie("jwt", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    secure:
+      process.env.NODE_ENV === "production" ||
+      (process.env.CLIENT_URL || "").startsWith("https://"),
+    sameSite:
+      process.env.NODE_ENV === "production" ||
+      (process.env.CLIENT_URL || "").startsWith("https://")
+        ? "none"
+        : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     path: "/", // cookie valid for entire site
   });

@@ -24,6 +24,7 @@ export const refreshToken = asyncHandler(
     res.json({
       success: true,
       message: "Token refreshed",
+      data: { accessToken: token },
     });
   },
 );

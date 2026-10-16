@@ -25,10 +25,14 @@ const ALGORITHM = "HS512" as const;
 const ISSUER = "gygi-platform";
 const AUDIENCE = "gygi-users";
 
+/** Vercel and Render are different sites, so the cookie must be cross-site. */
+const crossSiteCookie =
+  env.nodeEnv === "production" || env.clientUrl.startsWith("https://");
+
 const buildCookieOptions = (maxAge: number, path = "/") => ({
   httpOnly: true,
-  secure: env.nodeEnv === "production",
-  sameSite: (env.nodeEnv === "production" ? "none" : "lax") as "none" | "lax",
+  secure: crossSiteCookie,
+  sameSite: (crossSiteCookie ? "none" : "lax") as "none" | "lax",
   maxAge,
   path,
 });

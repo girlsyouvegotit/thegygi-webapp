@@ -1,4 +1,5 @@
 import { io, Socket } from "socket.io-client";
+import { readAccessToken } from "@/lib/session";
 
 let socket: Socket | null = null;
 
@@ -12,6 +13,7 @@ export const initializeSocket = (): Socket => {
 
   socket = io(import.meta.env.VITE_SOCKET_URL || "http://localhost:5000", {
     withCredentials: true,
+    auth: { token: readAccessToken() || undefined },
     autoConnect: true,
     reconnection: true,
     reconnectionAttempts: 5,

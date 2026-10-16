@@ -1,4 +1,5 @@
 import { api } from "@/lib/api";
+import { extractAccessToken, writeAccessToken } from "@/lib/session";
 import type { user } from "@/types";
 
 export const IMPERSONATION_STORAGE_KEY = "gygi_impersonation";
@@ -65,6 +66,8 @@ export async function startActAs(
   const { data } = await api.post<ApiEnvelope>(
     `/super-admin/people/${userId}/impersonate`,
   );
+  const token = extractAccessToken(data);
+  if (token) writeAccessToken(token);
   const payload = data.data;
   if (!payload?.user || !payload.home || !payload.target || !payload.actor) {
     throw new Error("Impersonation response was incomplete");
@@ -89,6 +92,8 @@ export async function startActAs(
 
 export async function stopActAs(): Promise<{ user: user; home: string }> {
   const { data } = await api.post<ApiEnvelope>("/auth/stop-impersonation");
+  const token = extractAccessToken(data);
+  if (token) writeAccessToken(token);
   clearImpersonationSession();
   const payload = data.data;
   if (!payload?.user) {

@@ -74,7 +74,7 @@ export const register = asyncHandler(
     res.status(201).json({
       success: true,
       message: "Registration successful",
-      data: { user: populated || user },
+      data: { user: populated || user, accessToken: token },
     });
   },
 );
@@ -106,7 +106,7 @@ export const login = asyncHandler(
     res.json({
       success: true,
       message: "Login successful",
-      data: { user: populated || user },
+      data: { user: populated || user, accessToken: token },
     });
   },
 );
@@ -190,6 +190,7 @@ export const stopImpersonation = asyncHandler(
       data: {
         user: actor,
         home: roleHomePath(actor.role),
+        accessToken: token,
         impersonation: null,
       },
     });

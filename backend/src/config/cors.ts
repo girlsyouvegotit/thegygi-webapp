@@ -14,6 +14,7 @@ export function getAllowedOrigins(): string[] {
   const origins = [
     env.clientUrl,
     ...fromSocketEnv,
+    "https://thegygi-webapp.vercel.app",
     "https://gygingo.vercel.app",
     ...(env.nodeEnv === "development"
       ? [
