@@ -23,9 +23,7 @@ export const processRecording = inngest.createFunction(
     id: "process-recording",
     retries: 3,
     onFailure: async ({ event, error }) => {
-      const originalEvent = event.event;
-
-      const data = event.data as RecordingProcessEvent;
+      const data = event.data.event.data as RecordingProcessEvent;
       console.error(
         `Recording processing failed for ${data.recordingId}:`,
         error,

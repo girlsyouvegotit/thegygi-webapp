@@ -24,7 +24,7 @@ const ChapterSidebar = ({
   }
 
   return (
-    <ScrollArea className="h-full">
+    <ScrollArea className="h-full min-w-0 [&_[data-slot=scroll-area-viewport]>div]:!block [&_[data-slot=scroll-area-viewport]>div]:!min-w-0">
       <div className="p-2 space-y-1">
         {chapters.map((chapter, index) => (
           <button
@@ -37,9 +37,9 @@ const ChapterSidebar = ({
                 : "hover:bg-muted",
             )}
           >
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">{chapter.title}</span>
-              <span className="text-xs text-muted-foreground">
+            <div className="flex items-start justify-between gap-2">
+              <span className="min-w-0 break-words text-sm font-medium">{chapter.title}</span>
+              <span className="shrink-0 text-xs text-muted-foreground">
                 {chapter.timestamp}
               </span>
             </div>

@@ -145,7 +145,7 @@ quizSchema.methods.isAvailable = function (): boolean {
 };
 
 quizSchema.methods.getPublicQuestions = function () {
-  return this.questions.map((q) => ({
+  return this.questions.map((q: IQuestion) => ({
     _id: q._id,
     type: q.type,
     questionText: q.questionText,

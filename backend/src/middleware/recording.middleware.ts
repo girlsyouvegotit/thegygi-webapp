@@ -111,7 +111,7 @@ export const requireRecordingDownload = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    if (!hasRole(req.user, ["admin"])) {
+    if (!hasRole(req.user ?? null, ["admin"])) {
       throw forbidden("Only admins can download recordings");
     }
     next();

@@ -147,7 +147,7 @@ const categorySchema = new Schema<ICategory>(
       virtuals: true,
       transform: (_doc, ret) => {
         // ONLY delete __v, KEEP _id
-        delete ret.__v;
+        delete (ret as { __v?: number }).__v;
         return ret;
       },
     },

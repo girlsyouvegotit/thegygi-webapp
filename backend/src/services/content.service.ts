@@ -81,10 +81,10 @@ export async function listPublicPosts(query: {
     ];
   }
 
-  const sort =
+  const sort: Record<string, 1 | -1> =
     query.sort === "popular"
-      ? ({ viewCount: -1, publishedAt: -1 } as const)
-      : ({ publishedAt: -1 } as const);
+      ? { viewCount: -1, publishedAt: -1 }
+      : { publishedAt: -1 };
 
   const [items, total, categories] = await Promise.all([
     BlogPost.find(filter)

@@ -36,7 +36,7 @@ export const getAllRecordings = asyncHandler(
       [];
     let total = 0;
 
-    if (hasRole(req.user, ["admin"])) {
+    if (hasRole(req.user ?? null, ["admin"])) {
       // Admin + super_admin see all recordings (optionally filtered by category)
       const result = await listRecordings({
         categoryId: categoryFilter,

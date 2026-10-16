@@ -76,6 +76,7 @@ async function emitSalaryPaidNotification(params: {
       salaryId: params.salaryId,
       link: dashboardLinkForRole(employee.role),
     });
+    if (!notification) return;
 
     const payload = {
       _id: String(notification._id),
@@ -243,7 +244,7 @@ export const updateSalary = asyncHandler(
         ? new Date(paymentDate)
         : existing.paymentDate || new Date();
     } else if (paymentDate !== undefined) {
-      existing.paymentDate = paymentDate ? new Date(paymentDate) : null;
+      existing.paymentDate = paymentDate ? new Date(paymentDate) : undefined;
     }
 
     await existing.save();

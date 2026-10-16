@@ -154,13 +154,13 @@ export const getQuizzesByCategory = asyncHandler(
  */
 export const getQuizById = asyncHandler(
   async (req: AuthRequest, res: Response): Promise<void> => {
-    let query = Quiz.findById(req.params.id)
+    const query = Quiz.findById(req.params.id)
       .populate("category", "name slug")
       .populate("tutor", "name email");
 
     // Hide correct answers for students
     if (req.user!.role === "student") {
-      query = query.select("-questions.correctAnswer");
+      query.select("-questions.correctAnswer");
     }
 
     const quiz = await query;

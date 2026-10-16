@@ -79,7 +79,7 @@ export const getAllCategories = asyncHandler(
  * @route GET /api/categories/:id
  */
 export const getCategoryById = asyncHandler(
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: AuthRequest, res: Response): Promise<void> => {
     const category = await getCategoryByIdService(req.params.id);
 
     if (!category) {

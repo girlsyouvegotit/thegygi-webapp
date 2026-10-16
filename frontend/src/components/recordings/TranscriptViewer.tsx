@@ -53,7 +53,7 @@ const TranscriptViewer = ({
           />
         </div>
       </div>
-      <ScrollArea className="flex-1">
+      <ScrollArea className="min-w-0 flex-1 [&_[data-slot=scroll-area-viewport]>div]:!block [&_[data-slot=scroll-area-viewport]>div]:!min-w-0">
         <div className="p-4 space-y-2">
           {filteredLines.map((line, index) => {
             const timestampMatch = line.match(/(\[?\d{2}:\d{2}:\d{2}\]?)/);
@@ -78,7 +78,7 @@ const TranscriptViewer = ({
                     {timestamp}
                   </span>
                 )}
-                <span className="text-sm">{content}</span>
+                <span className="break-words text-sm">{content}</span>
               </button>
             );
           })}

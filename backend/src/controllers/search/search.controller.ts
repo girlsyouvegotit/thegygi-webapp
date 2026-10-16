@@ -51,7 +51,7 @@ export interface SearchResult {
   badge?: string;
 }
 
-type Role = "student" | "tutor" | "mentor" | "admin";
+type Role = "student" | "tutor" | "mentor" | "admin" | "super_admin";
 
 const PER_BUCKET = 6;
 const MAX_TOTAL = 40;

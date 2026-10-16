@@ -43,7 +43,7 @@ const PracticeQuestions = ({ questions }: PracticeQuestionsProps) => {
     <div className="space-y-4">
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-sm font-medium">
+          <CardTitle className="flex flex-wrap items-center gap-2 text-sm font-medium">
             <FileQuestion className="h-4 w-4 text-primary" />
             Practice Questions
             <span className="text-xs text-muted-foreground">
@@ -55,7 +55,7 @@ const PracticeQuestions = ({ questions }: PracticeQuestionsProps) => {
           <div className="space-y-6">
             {questions.map((question, qIndex) => (
               <div key={qIndex} className="space-y-3">
-                <p className="font-medium text-sm">
+                <p className="break-words text-sm font-medium">
                   {qIndex + 1}. {question.question}
                 </p>
                 <div className="space-y-2">
@@ -73,7 +73,7 @@ const PracticeQuestions = ({ questions }: PracticeQuestionsProps) => {
                         }
                         disabled={showResults}
                         className={cn(
-                          "w-full text-left p-3 rounded-lg border transition-colors",
+                          "w-full break-words text-left p-3 rounded-lg border transition-colors",
                           isSelected && !showResults
                             ? "border-primary bg-primary/5"
                             : "border-border hover:bg-muted",

@@ -1,12 +1,6 @@
 import { Socket } from "socket.io";
-import { DefaultEventsMap } from "socket.io/dist/typed-events";
 
-export interface AuthSocket extends Socket<
-  DefaultEventsMap,
-  DefaultEventsMap,
-  DefaultEventsMap,
-  any
-> {
+export interface AuthSocket extends Socket {
   userId?: string;
   userRole?: string;
 }

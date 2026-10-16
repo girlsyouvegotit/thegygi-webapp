@@ -235,13 +235,22 @@ const userSchema: Schema<IUser> = new Schema(
     timestamps: true,
     toJSON: {
       transform: (_doc, ret) => {
-        delete ret.password;
-        delete ret.resetPasswordToken;
-        delete ret.resetPasswordExpire;
-        delete ret.emailVerificationToken;
-        delete ret.failedLoginAttempts;
-        delete ret.lockedUntil;
-        delete ret.__v;
+        const safe = ret as {
+          password?: string;
+          resetPasswordToken?: string;
+          resetPasswordExpire?: Date;
+          emailVerificationToken?: string;
+          failedLoginAttempts?: number;
+          lockedUntil?: Date;
+          __v?: number;
+        };
+        delete safe.password;
+        delete safe.resetPasswordToken;
+        delete safe.resetPasswordExpire;
+        delete safe.emailVerificationToken;
+        delete safe.failedLoginAttempts;
+        delete safe.lockedUntil;
+        delete safe.__v;
         return ret;
       },
     },

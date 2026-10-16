@@ -259,7 +259,15 @@ export async function getAcademicsHub() {
   };
 }
 
-export async function getContentHub() {
+export async function getContentHub(): Promise<{
+  recordingStorage: {
+    total: number;
+    failedCount: number;
+    byStatus: { status: unknown; count: number }[];
+  };
+  failedRecordings: unknown[];
+  recentMessages: unknown[];
+}> {
   const [total, failedCount, byStatus, failedRecordings, recentMessages] =
     await Promise.all([
       Recording.countDocuments({}),
@@ -297,7 +305,7 @@ export async function getContentHub() {
   };
 }
 
-export async function getWorkforceHub() {
+export async function getWorkforceHub(): Promise<unknown> {
   const past14 = daysAgo(14);
   const next14 = daysFromNow(14);
   const d30 = daysAgo(30);

@@ -159,7 +159,7 @@ const RecordingPlayer = forwardRef<RecordingPlayerHandle, RecordingPlayerProps>(
         />
 
         {/* Top badges */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-4">
+        <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-2 sm:p-4">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1 text-[11px] font-semibold text-slate-800 shadow-sm backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
             Recorded
@@ -177,7 +177,7 @@ const RecordingPlayer = forwardRef<RecordingPlayerHandle, RecordingPlayerProps>(
         {title && (
           <div
             className={cn(
-              "pointer-events-none absolute inset-x-0 top-12 px-5 transition-opacity duration-300",
+              "pointer-events-none absolute inset-x-0 top-11 px-3 transition-opacity duration-300 sm:top-12 sm:px-5",
               showControls ? "opacity-100" : "opacity-0",
             )}
           >
@@ -190,10 +190,10 @@ const RecordingPlayer = forwardRef<RecordingPlayerHandle, RecordingPlayerProps>(
         {/* Floating control dock */}
         <div
           className={cn(
-            "absolute inset-x-0 bottom-0 p-4 transition-all duration-300",
+            "absolute inset-x-0 bottom-0 p-2 transition-all duration-300 sm:p-4",
             showControls
               ? "translate-y-0 opacity-100"
-              : "translate-y-2 opacity-0",
+              : "max-sm:translate-y-0 max-sm:opacity-100 translate-y-2 opacity-0",
           )}
         >
           <div className="mb-3 px-1">
@@ -210,11 +210,11 @@ const RecordingPlayer = forwardRef<RecordingPlayerHandle, RecordingPlayerProps>(
             </div>
           </div>
 
-          <div className="mx-auto flex w-fit items-center gap-2 rounded-full bg-white/95 px-2.5 py-2 shadow-xl shadow-slate-900/20 backdrop-blur">
+          <div className="mx-auto flex w-full max-w-full items-center justify-center gap-0.5 rounded-full bg-white/95 px-1 py-1.5 shadow-xl shadow-slate-900/20 backdrop-blur sm:w-fit sm:gap-2 sm:px-2.5 sm:py-2">
             <button
               type="button"
               onClick={() => skip(-10)}
-              className="flex h-10 w-10 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100 sm:h-10 sm:w-10"
               aria-label="Back 10 seconds"
             >
               <SkipBack className="h-4 w-4" />
@@ -222,7 +222,7 @@ const RecordingPlayer = forwardRef<RecordingPlayerHandle, RecordingPlayerProps>(
             <button
               type="button"
               onClick={togglePlay}
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--primary)] text-white shadow-lg shadow-[color-mix(in_srgb,var(--primary)_35%,transparent)] transition hover:brightness-110"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--primary)] text-white shadow-lg shadow-[color-mix(in_srgb,var(--primary)_35%,transparent)] transition hover:brightness-110 sm:h-11 sm:w-11"
               aria-label={isPlaying ? "Pause" : "Play"}
             >
               {isPlaying ? (
@@ -234,7 +234,7 @@ const RecordingPlayer = forwardRef<RecordingPlayerHandle, RecordingPlayerProps>(
             <button
               type="button"
               onClick={() => skip(10)}
-              className="flex h-10 w-10 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100 sm:h-10 sm:w-10"
               aria-label="Forward 10 seconds"
             >
               <SkipForward className="h-4 w-4" />
@@ -243,7 +243,7 @@ const RecordingPlayer = forwardRef<RecordingPlayerHandle, RecordingPlayerProps>(
             <button
               type="button"
               onClick={toggleMute}
-              className="flex h-10 w-10 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100 sm:h-10 sm:w-10"
               aria-label={isMuted ? "Unmute" : "Mute"}
             >
               {isMuted || volume === 0 ? (

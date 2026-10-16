@@ -136,7 +136,7 @@ export const getTutorStudents = async (tutorId: string) => {
   }
 
   for (const enrollment of enrollments) {
-    const student = enrollment.student as
+    const student = enrollment.student as unknown as
       | (Record<string, unknown> & { _id?: { toString: () => string } })
       | null
       | undefined;

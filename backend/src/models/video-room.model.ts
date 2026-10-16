@@ -417,7 +417,8 @@ videoRoomSchema.methods.isUserInRoom = function (
   userId: mongoose.Types.ObjectId,
 ): boolean {
   return this.participants.some(
-    (p) => p.userId.toString() === userId.toString() && p.status === "joined",
+    (p: IRoomParticipant) =>
+      p.userId.toString() === userId.toString() && p.status === "joined",
   );
 };
 
@@ -426,14 +427,14 @@ videoRoomSchema.methods.getParticipant = function (
   userId: mongoose.Types.ObjectId,
 ): IRoomParticipant | undefined {
   return this.participants.find(
-    (p) => p.userId.toString() === userId.toString(),
+    (p: IRoomParticipant) => p.userId.toString() === userId.toString(),
   );
 };
 
 // Method to check if room is at capacity
 videoRoomSchema.methods.isAtCapacity = function (): boolean {
   const activeParticipants = this.participants.filter(
-    (p) => p.status === "joined",
+    (p: IRoomParticipant) => p.status === "joined",
   ).length;
   return activeParticipants >= this.settings.maxParticipants;
 };
@@ -462,7 +463,7 @@ videoRoomSchema.methods.addParticipant = async function (
   }
 
   this.participantCount = this.participants.filter(
-    (p) => p.status === "joined",
+    (p: IRoomParticipant) => p.status === "joined",
   ).length;
 };
 
@@ -480,7 +481,7 @@ videoRoomSchema.methods.removeParticipant = function (
     participant.isScreenSharing = false;
 
     this.participantCount = this.participants.filter(
-      (p) => p.status === "joined",
+      (p: IRoomParticipant) => p.status === "joined",
     ).length;
   }
 };

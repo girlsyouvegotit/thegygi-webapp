@@ -66,7 +66,7 @@ export const initializeSocket = (httpServer: HttpServer): SocketServer => {
     handleCommunityEvents(io, socket);
     handleNotificationEvents(io, socket);
 
-    socket.on("ping-check", (callback) => {
+    socket.on("ping-check", (callback: unknown) => {
       if (typeof callback === "function") {
         callback({ status: "ok", timestamp: Date.now() });
       }

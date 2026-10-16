@@ -135,7 +135,7 @@ const ClassInteractions = ({
                   : "border-slate-100 bg-white hover:border-slate-200 hover:bg-slate-50/80",
               )}
             >
-              <div className="mb-1 flex items-center gap-2">
+              <div className="mb-1 flex min-w-0 flex-wrap items-center gap-2">
                 <span
                   className={cn(
                     "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold",
@@ -152,7 +152,7 @@ const ClassInteractions = ({
                   {msg.userName}
                 </span>
               </div>
-              <p className="text-sm leading-snug text-slate-800">{msg.message}</p>
+              <p className="break-words text-sm leading-snug text-slate-800">{msg.message}</p>
             </button>
           );
         })}

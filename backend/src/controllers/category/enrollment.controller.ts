@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import type { Response } from "express";
 import {
   enrollStudentInCategory,
   getCategoryStudents,
@@ -49,7 +49,7 @@ export const enrollStudent = asyncHandler(
  * @route GET /api/categories/:id/enrollments
  */
 export const getStudentEnrollments = asyncHandler(
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: AuthRequest, res: Response): Promise<void> => {
     const categoryId = req.params.id;
     const enrollments = await getCategoryStudents(categoryId);
 

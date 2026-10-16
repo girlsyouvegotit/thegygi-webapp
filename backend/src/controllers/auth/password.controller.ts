@@ -5,6 +5,7 @@ import { sendEmail } from "../../services/email.service.js";
 import { env } from "../../config/env.js";
 import { logActivity } from "../../services/activity.service.js";
 import { asyncHandler } from "../../middleware/error.middleware.js";
+import type { AuthRequest } from "../../middleware/auth.middleware.js";
 
 /**
  * Forgot password
@@ -78,7 +79,7 @@ export const forgotPassword = asyncHandler(
  * @route POST /api/auth/reset-password/:token
  */
 export const resetPassword = asyncHandler(
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: AuthRequest, res: Response): Promise<void> => {
     const { token } = req.params;
     const { password, confirmPassword } = req.body;
 

@@ -19,7 +19,7 @@ export const getAcademicYears = asyncHandler(
         name: defaultYearName(),
         isActive: true,
       });
-      years = [created.toObject()];
+      years = [created.toObject() as (typeof years)[number]];
     }
 
     res.json({

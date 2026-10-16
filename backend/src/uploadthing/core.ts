@@ -96,13 +96,13 @@ export const uploadRouter = {
     }),
   /**
    * Community chat / DM attachments (images + common docs).
-   * Hard cap: 5MB per file.
+   * Hard cap: 4MB per file (largest size UploadThing's types allow under 5MB).
    */
   chatFileUploader: upload({
-    image: { maxFileSize: "5MB", maxFileCount: 4 },
-    pdf: { maxFileSize: "5MB", maxFileCount: 4 },
-    text: { maxFileSize: "5MB", maxFileCount: 4 },
-    blob: { maxFileSize: "5MB", maxFileCount: 4 },
+    image: { maxFileSize: "4MB", maxFileCount: 4 },
+    pdf: { maxFileSize: "4MB", maxFileCount: 4 },
+    text: { maxFileSize: "4MB", maxFileCount: 4 },
+    blob: { maxFileSize: "4MB", maxFileCount: 4 },
   })
     .middleware(async ({ req }) => {
       return getUserFromRequest(req);
@@ -129,13 +129,13 @@ export const uploadRouter = {
 
   /**
    * Student assignment file submissions.
-   * Hard cap: 5MB per file.
+   * Hard cap: 4MB per file (largest size UploadThing's types allow under 5MB).
    */
   assignmentFileUploader: upload({
-    image: { maxFileSize: "5MB", maxFileCount: 3 },
-    pdf: { maxFileSize: "5MB", maxFileCount: 3 },
-    text: { maxFileSize: "5MB", maxFileCount: 3 },
-    blob: { maxFileSize: "5MB", maxFileCount: 3 },
+    image: { maxFileSize: "4MB", maxFileCount: 3 },
+    pdf: { maxFileSize: "4MB", maxFileCount: 3 },
+    text: { maxFileSize: "4MB", maxFileCount: 3 },
+    blob: { maxFileSize: "4MB", maxFileCount: 3 },
   })
     .middleware(async ({ req }) => {
       return getUserFromRequest(req);

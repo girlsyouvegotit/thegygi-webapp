@@ -8,13 +8,15 @@ import {
 } from "../utils/jwt.util.js";
 import { unauthorized } from "./error.middleware.js";
 
-export interface AuthRequest extends Request {
+export interface AuthRequest extends Omit<Request, "params"> {
   user?: IUser;
   userId?: string;
   token?: string;
   /** Present when a super-admin is acting as `user`. */
   impersonator?: IUser;
   impersonatorId?: string;
+  /** App routes use single path segments (`:id`), not wildcard arrays. */
+  params: Record<string, string>;
 }
 
 export const protect = async (

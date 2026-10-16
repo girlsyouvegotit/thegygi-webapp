@@ -89,6 +89,7 @@ export const getAnnouncements = asyncHandler(
     const announcements = await getChannelMessages(
       Array.isArray(communityId) ? communityId[0] : communityId,
       announcementChannel._id.toString(),
+      String(req.user!._id),
       50,
     );
 

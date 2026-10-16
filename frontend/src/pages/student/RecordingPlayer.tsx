@@ -204,7 +204,7 @@ const RecordingPlayer = () => {
   ];
 
   return (
-    <div className="relative -mx-1 min-h-[calc(100dvh-7rem)] animate-in fade-in duration-500">
+    <div className="relative min-w-0 overflow-x-hidden min-h-[calc(100dvh-7rem)] animate-in fade-in duration-500">
       {/* Soft atmosphere */}
       <div
         aria-hidden
@@ -218,8 +218,8 @@ const RecordingPlayer = () => {
         {/* ───────── Main column ───────── */}
         <div className="min-w-0 space-y-5">
           {/* Greeting header */}
-          <header className="flex flex-wrap items-start justify-between gap-3">
-            <div className="flex items-start gap-3">
+          <header className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
+            <div className="flex min-w-0 items-start gap-3">
               <button
                 type="button"
                 onClick={() => navigate(recordingsHome)}
@@ -228,23 +228,23 @@ const RecordingPlayer = () => {
               >
                 <ArrowLeft className="h-4 w-4" />
               </button>
-              <div>
-                <h1 className="text-2xl font-black tracking-tight text-slate-900 sm:text-[1.75rem]">
+              <div className="min-w-0">
+                <h1 className="text-xl font-black tracking-tight text-slate-900 sm:text-[1.75rem]">
                   Hi, {firstName}!
                 </h1>
                 <p className="mt-0.5 text-sm text-slate-500">
-                  <span className="font-medium text-slate-700">
+                  <span className="font-medium text-slate-700 break-words">
                     {recording.classId?.title || "Class Recording"}
                   </span>
-                  <span className="mx-1.5 text-slate-300">|</span>
-                  <span>
+                  <span className="mx-1.5 text-slate-300">·</span>
+                  <span className="break-words">
                     {recording.category?.name || "GYGI"} · Recorded class
                   </span>
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex shrink-0 items-center gap-2 pl-[3.25rem] sm:pl-0">
               <Badge
                 className={cn(
                   "rounded-full border-0 px-3 py-1 text-[11px] font-semibold",
@@ -327,9 +327,9 @@ const RecordingPlayer = () => {
           </section>
 
           {/* People / meta strip (participants-style) */}
-          <section className="flex flex-wrap items-center gap-4 rounded-[1.5rem] border border-slate-200/80 bg-white/90 px-4 py-3 shadow-sm backdrop-blur">
-            <div className="flex items-center gap-3 pr-3 border-r border-slate-100">
-              <Avatar className="h-11 w-11 ring-2 ring-white shadow">
+          <section className="flex flex-col gap-3 rounded-[1.5rem] border border-slate-200/80 bg-white/90 px-3 py-3 shadow-sm backdrop-blur sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 sm:px-4">
+            <div className="flex min-w-0 items-center gap-3 sm:border-r sm:border-slate-100 sm:pr-3">
+              <Avatar className="h-11 w-11 shrink-0 ring-2 ring-white shadow">
                 <AvatarImage
                   src={recording.tutor?.avatar}
                   alt={recording.tutor?.name}
@@ -338,8 +338,8 @@ const RecordingPlayer = () => {
                   {recording.tutor?.name?.charAt(0) || "T"}
                 </AvatarFallback>
               </Avatar>
-              <div>
-                <p className="text-sm font-semibold text-slate-900">
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-slate-900">
                   {recording.tutor?.name || "Tutor"}
                 </p>
                 <p className="text-[11px] text-slate-500">Instructor</p>
@@ -366,11 +366,11 @@ const RecordingPlayer = () => {
               )}
             </div>
 
-            <div className="ml-auto">
+            <div className="sm:ml-auto">
               <Button
                 variant="outline"
                 size="sm"
-                className="h-9 rounded-full border-slate-200 text-xs"
+                className="h-9 w-full rounded-full border-slate-200 text-xs sm:w-auto"
                 onClick={() => navigate("/mentorship")}
               >
                 <GraduationCap className="mr-1.5 h-3.5 w-3.5" />
@@ -381,7 +381,7 @@ const RecordingPlayer = () => {
 
           {/* Class insights */}
           <section className="space-y-3">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-3">
               <h2 className="text-base font-bold text-slate-900">
                 Class insights
               </h2>
@@ -468,19 +468,19 @@ const RecordingPlayer = () => {
           </div>
 
           <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[1.5rem] border border-slate-200/80 bg-white shadow-sm">
-            <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
-              <div>
+            <div className="flex items-start justify-between gap-2 border-b border-slate-100 px-3 py-3 sm:px-4">
+              <div className="min-w-0">
                 <h3 className="text-sm font-bold text-slate-900">Study room</h3>
                 <p className="text-[11px] text-slate-500">
                   Summary, chat, transcript & practice
                 </p>
               </div>
-              <Badge className="rounded-full border-0 bg-[color-mix(in_srgb,var(--primary)_12%,white)] text-[10px] text-[var(--primary)]">
+              <Badge className="shrink-0 rounded-full border-0 bg-[color-mix(in_srgb,var(--primary)_12%,white)] text-[10px] text-[var(--primary)]">
                 GYGI AI
               </Badge>
             </div>
 
-            <div className="flex gap-1 overflow-x-auto border-b border-slate-100 px-3 py-2">
+            <div className="flex flex-wrap gap-1 border-b border-slate-100 px-2 py-2 sm:px-3">
               {studyTabs.map((tab) => (
                 <button
                   key={tab.id}
@@ -510,7 +510,7 @@ const RecordingPlayer = () => {
               ))}
             </div>
 
-            <div className="min-h-[320px] flex-1 overflow-y-auto p-4">
+            <div className="min-h-[280px] min-w-0 flex-1 overflow-y-auto p-3 sm:min-h-[320px] sm:p-4">
               {activeTab === "summary" && (
                 <div className="space-y-3">
                   <AISummary summary={summary} aiNotes={aiNotes} />
@@ -523,7 +523,7 @@ const RecordingPlayer = () => {
                     recordingId={id!}
                     onJumpToTimestamp={handleTimestampClick}
                   />
-                  <div className="h-[28rem] overflow-hidden rounded-2xl border border-slate-100">
+                  <div className="h-[22rem] min-w-0 overflow-hidden rounded-2xl border border-slate-100 sm:h-[28rem]">
                     <TranscriptViewer
                       transcript={
                         panelQuery.trim()
@@ -549,7 +549,7 @@ const RecordingPlayer = () => {
                   currentTimeSeconds={playbackSeconds}
                   onJumpToOffset={handleInteractionJump}
                   query={panelQuery}
-                  className="h-[28rem]"
+                  className="h-[22rem] min-w-0 sm:h-[28rem]"
                 />
               )}
 
@@ -558,7 +558,7 @@ const RecordingPlayer = () => {
               )}
 
               {activeTab === "chapters" && (
-                <div className="h-[28rem]">
+                <div className="h-[22rem] min-w-0 sm:h-[28rem]">
                   <ChapterSidebar
                     chapters={chapters}
                     currentChapter={currentTimestamp}
@@ -569,17 +569,19 @@ const RecordingPlayer = () => {
             </div>
 
             <div className="border-t border-slate-100 px-4 py-3">
-              <div className="flex items-center gap-2 rounded-full bg-slate-50 px-3 py-2 text-xs text-slate-500">
-                <FileText className="h-3.5 w-3.5 text-[var(--primary)]" />
-                Jump chapters, class chat, or search the transcript while you
-                watch.
+              <div className="flex items-start gap-2 rounded-2xl bg-slate-50 px-3 py-2 text-xs leading-relaxed text-slate-500 sm:rounded-full sm:items-center">
+                <FileText className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--primary)] sm:mt-0" />
+                <span className="min-w-0">
+                  Jump chapters, class chat, or search the transcript while you
+                  watch.
+                </span>
               </div>
             </div>
           </div>
 
           {/* Soft CTA — GYGI learning, not generic premium */}
-          <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-[color-mix(in_srgb,var(--primary)_18%,white)] via-sky-50 to-white p-5 shadow-sm ring-1 ring-[color-mix(in_srgb,var(--primary)_15%,transparent)]">
-            <div className="relative z-10 max-w-[70%]">
+          <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-[color-mix(in_srgb,var(--primary)_18%,white)] via-sky-50 to-white p-4 shadow-sm ring-1 ring-[color-mix(in_srgb,var(--primary)_15%,transparent)] sm:p-5">
+            <div className="relative z-10 pr-14 sm:max-w-[70%] sm:pr-0">
               <p className="text-sm font-bold text-slate-900">Keep learning</p>
               <p className="mt-1 text-xs leading-relaxed text-slate-600">
                 Catch up on more classes in your category, or book mentorship
@@ -603,7 +605,7 @@ const RecordingPlayer = () => {
                 </Button>
               </div>
             </div>
-            <GraduationCap className="absolute -bottom-2 -right-2 h-24 w-24 rotate-12 text-[color-mix(in_srgb,var(--primary)_25%,transparent)]" />
+            <GraduationCap className="absolute -bottom-1 -right-1 h-16 w-16 rotate-12 text-[color-mix(in_srgb,var(--primary)_25%,transparent)] sm:-bottom-2 sm:-right-2 sm:h-24 sm:w-24" />
           </div>
         </aside>
       </div>

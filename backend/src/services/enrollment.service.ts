@@ -158,6 +158,10 @@ export const enrollStudentInCategory = async (
       );
     }
 
+    if (!enrollment) {
+      throw badRequest("Enrollment could not be saved");
+    }
+
     return enrollment;
   } catch (error) {
     if (session.inTransaction()) {
