@@ -31,10 +31,10 @@ const router = express.Router();
 // Validation schemas
 const completionRulesSchema = z
   .object({
-    attendanceWeight: z.number().min(0).max(100).optional(),
-    quizWeight: z.number().min(0).max(100).optional(),
-    assignmentWeight: z.number().min(0).max(100).optional(),
-    passThreshold: z.number().min(1).max(100).optional(),
+    attendanceWeight: z.coerce.number().min(0).max(100).optional(),
+    quizWeight: z.coerce.number().min(0).max(100).optional(),
+    assignmentWeight: z.coerce.number().min(0).max(100).optional(),
+    passThreshold: z.coerce.number().min(1).max(100).optional(),
   })
   .optional();
 
@@ -46,7 +46,14 @@ const createCategorySchema = z
       .min(10, "Description must be at least 10 characters"),
     icon: z.string().optional(),
     bannerImage: z.string().optional(),
-    durationWeeks: z.number().min(1).max(104).nullable().optional(),
+    durationWeeks: z.preprocess(
+      (value) => {
+        if (value === "" || value === null || value === undefined) return null;
+        const n = typeof value === "number" ? value : Number(value);
+        return Number.isNaN(n) ? value : n;
+      },
+      z.number().min(1).max(104).nullable().optional(),
+    ),
     certificateEnabled: z.boolean().optional(),
     certificateTitle: z.string().max(200).nullable().optional(),
     completionRules: completionRulesSchema,
@@ -71,7 +78,14 @@ const updateCategorySchema = z
     icon: z.string().optional(),
     bannerImage: z.string().optional(),
     isActive: z.boolean().optional(),
-    durationWeeks: z.number().min(1).max(104).nullable().optional(),
+    durationWeeks: z.preprocess(
+      (value) => {
+        if (value === "" || value === null || value === undefined) return null;
+        const n = typeof value === "number" ? value : Number(value);
+        return Number.isNaN(n) ? value : n;
+      },
+      z.number().min(1).max(104).nullable().optional(),
+    ),
     certificateEnabled: z.boolean().optional(),
     certificateTitle: z.string().max(200).nullable().optional(),
     completionRules: completionRulesSchema,

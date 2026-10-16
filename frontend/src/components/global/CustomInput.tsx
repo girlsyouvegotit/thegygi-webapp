@@ -33,7 +33,24 @@ export function CustomInput<T extends FieldValues>({
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
           <FieldLabel>{label}</FieldLabel>
-          <Input {...field} {...props} />
+          <Input
+            {...field}
+            {...props}
+            value={field.value ?? ""}
+            onChange={(event) => {
+              if (props.type === "number") {
+                const raw = event.target.value;
+                if (raw === "") {
+                  field.onChange(null);
+                  return;
+                }
+                const next = event.target.valueAsNumber;
+                field.onChange(Number.isNaN(next) ? raw : next);
+                return;
+              }
+              field.onChange(event);
+            }}
+          />
 
           {description && (
             <p

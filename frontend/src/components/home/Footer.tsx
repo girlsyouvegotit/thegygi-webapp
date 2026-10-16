@@ -1,10 +1,9 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import {
   Facebook,
   Instagram,
   Linkedin,
   Twitter,
-  ArrowUp,
   X,
   Mail,
   User,
@@ -34,6 +33,26 @@ type GetInvolvedInterest = (typeof GET_INVOLVED_INTERESTS)[number];
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const footerRef = useRef<HTMLElement>(null);
+  const [showThread, setShowThread] = useState(false);
+
+  useEffect(() => {
+    const footer = footerRef.current;
+    if (!footer) return;
+
+    const onScroll = () => {
+      const rect = footer.getBoundingClientRect();
+      setShowThread(rect.top < window.innerHeight && rect.bottom > 0);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
 
   // Newsletter state
   const [newsletterEmail, setNewsletterEmail] = useState("");
@@ -187,7 +206,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative bg-[#050505] overflow-hidden">
+    <footer ref={footerRef} className="relative bg-[#050505] overflow-hidden">
       {/* ============================================ */}
       {/* LAYERED BACKGROUND EFFECTS */}
       {/* ============================================ */}
@@ -494,11 +513,44 @@ const Footer = () => {
       {/* BACK TO TOP BUTTON */}
       {/* ============================================ */}
       <button
+        type="button"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className="fixed bottom-6 right-6 z-30 w-12 h-12 rounded-full bg-gradient-to-br from-primary to-purple-600 text-white shadow-2xl shadow-primary/40 flex items-center justify-center hover:scale-110 active:scale-90 transition-all duration-300"
+        className={`fixed right-2 top-20 z-30 text-primary transition-all duration-500 sm:right-5 ${
+          showThread
+            ? "translate-y-0 opacity-100"
+            : "pointer-events-none -translate-y-6 opacity-0"
+        }`}
         aria-label="Back to top"
+        tabIndex={showThread ? 0 : -1}
       >
-        <ArrowUp className="w-5 h-5" />
+        <svg
+          viewBox="0 0 48 168"
+          className="h-[18vh] max-h-40 w-12"
+          aria-hidden
+          fill="none"
+        >
+          <path d="M24 4L27.6 18H20.4L24 4Z" fill="currentColor" />
+          <path
+            d="M24 16V34"
+            stroke="currentColor"
+            strokeWidth="1.9"
+            strokeLinecap="round"
+          />
+          <ellipse
+            cx="24"
+            cy="42"
+            rx="3.4"
+            ry="6.2"
+            stroke="currentColor"
+            strokeWidth="1.35"
+          />
+          <path
+            d="M24 48C18 72 32 88 24 112C16 136 32 150 24 158"
+            stroke="currentColor"
+            strokeWidth="1.35"
+            strokeLinecap="round"
+          />
+        </svg>
       </button>
 
       {/* ============================================ */}

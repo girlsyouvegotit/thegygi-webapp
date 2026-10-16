@@ -15,12 +15,11 @@ import {
   Maximize,
   Minimize,
   ArrowRight,
-  ArrowUp,
-  Phone,
-  Check,
   Globe2,
   MapPinned,
   Users,
+  Sparkles,
+  GraduationCap,
 } from "lucide-react";
 import {
   MapContainer,
@@ -315,24 +314,132 @@ const scheduleItems = [
     time: "9:30 AM – 10:30 AM",
     duration: "1h",
     avatar: "/daniel.jpg",
+    blurb: "Build modern web apps with GYGI tutors — free, live, and recorded.",
   },
   {
     name: "Mentor session: Joy",
     time: "11:00 AM – 11:30 AM",
     duration: "30m",
     avatar: "/joy.jpg",
+    blurb: "One-to-one mentorship so every learner stays on track.",
   },
   {
     name: "Live class: UI/UX",
     time: "2:00 PM – 3:00 PM",
     duration: "1h",
     avatar: "/Kofo.jpg",
+    blurb: "Design skills that open doors across Africa.",
   },
 ];
 
+/**
+ * Hand-drawn wires. Each cubic leaves a tile edge, bows through the
+ * gap, and meets the next tile — the same flowing network as the reference,
+ * not a straight spoke into the hub.
+ */
+const orbitWires = [
+  // heart bows left into the hub
+  "M 52 13.5 C 40 22, 42 30, 46 34",
+  // heart bows right into the tech tile
+  "M 58 12 C 68 18, 64 22, 68 24",
+  // live class swings out left, then into the hub
+  "M 28 27 C 14 38, 22 50, 38 46",
+  // tech tile dips under itself, then into the hub
+  "M 72 28 C 80 42, 72 44, 62 42",
+  // dignity sags into the hub
+  "M 21 50 C 24 64, 34 60, 38 52",
+  // vocational arches over into the hub
+  "M 80 36 C 68 22, 64 28, 62 36",
+  // dignity curls down into the spark tile
+  "M 14 53 C 4 60, 10 70, 16 66",
+  // spark curls into Joy
+  "M 25 70 C 18 80, 26 84, 32 78",
+  // Joy rises into the hub
+  "M 40 64 C 28 56, 34 50, 42 58",
+  // globe tucks into the hub
+  "M 68 62 C 74 50, 68 46, 62 50",
+  // the long S from Daniel up through the gap into the hub
+  "M 56 82.5 C 36 72, 72 62, 54 58",
+  // Joy joins that S from the left
+  "M 44 80 C 50 90, 48 88, 52 84",
+  // globe joins Daniel with a right-hand sweep
+  "M 78 76 C 90 86, 72 94, 64 88",
+  // mentorship swings outside, into vocational
+  "M 94 53 C 99 44, 99 36, 95 38",
+  // mentorship curls down into the globe
+  "M 88 62 C 80 70, 84 74, 80 74",
+];
+
+function OrbitTile({
+  x,
+  y,
+  size,
+  src,
+  label,
+  radius,
+}: {
+  x: number;
+  y: number;
+  size: number;
+  src: string;
+  label: string;
+  radius: string;
+}) {
+  return (
+    <div
+      title={label}
+      className={`absolute z-10 overflow-hidden shadow-[0_10px_24px_rgba(20,16,30,0.08)] ${radius}`}
+      style={{
+        left: `${x}%`,
+        top: `${y}%`,
+        width: `${size}%`,
+        height: `${size}%`,
+        transform: "translate(-50%, -50%)",
+      }}
+    >
+      <img src={src} alt={label} className="h-full w-full object-cover" />
+    </div>
+  );
+}
+
+function GygiOrbit() {
+  return (
+    <div className="relative mx-auto aspect-square w-full max-w-[540px]">
+      <svg
+        viewBox="0 0 100 100"
+        className="absolute inset-0 h-full w-full text-foreground"
+        aria-hidden
+      >
+        {orbitWires.map((d) => (
+          <path
+            key={d}
+            d={d}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.35"
+            strokeLinecap="round"
+            vectorEffect="non-scaling-stroke"
+          />
+        ))}
+      </svg>
+
+      <OrbitTile x={54} y={8} size={11} radius="rounded-[1rem]" src="/gygishot.jpg" label="GYGI learners" />
+      <OrbitTile x={28} y={18} size={18} radius="rounded-[1.4rem]" src="/tech1.jpg" label="Live class" />
+      <OrbitTile x={78} y={18} size={20} radius="rounded-[1.5rem]" src="/tech3.jpg" label="Tech training" />
+      <OrbitTile x={12} y={44} size={18} radius="rounded-[1.45rem]" src="/pad1.jpg" label="Dignity program" />
+      <OrbitTile x={50} y={46} size={24} radius="rounded-[1.7rem]" src="/groupies.jpg" label="GYGI community" />
+      <OrbitTile x={88} y={42} size={16} radius="rounded-[1.35rem]" src="/skillUp.jpg" label="Vocational skills" />
+      <OrbitTile x={20} y={66} size={11} radius="rounded-[0.95rem]" src="/career1.jpg" label="Career literacy" />
+      <OrbitTile x={38} y={72} size={16} radius="rounded-[1.35rem]" src="/joy.jpg" label="Joy Sesi Ashidi" />
+      <OrbitTile x={76} y={68} size={17} radius="rounded-[1.45rem]" src="/communityhealth.jpg" label="Community health" />
+      <OrbitTile x={92} y={58} size={10} radius="rounded-[0.9rem]" src="/Kofo.jpg" label="Kofoworola Adetona" />
+      <OrbitTile x={56} y={90} size={15} radius="rounded-[1.3rem]" src="/daniel.jpg" label="Daniel Nwadinkpa" />
+    </div>
+  );
+}
+
 const Hero = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -347,11 +454,6 @@ const Hero = () => {
     const t = requestAnimationFrame(() => setVisible(true));
     return () => cancelAnimationFrame(t);
   }, []);
-
-  const handleJoin = (e: React.FormEvent) => {
-    e.preventDefault();
-    navigate("/register", { state: { email } });
-  };
 
   const handlePlayVideo = () => {
     setIsVideoOpen(true);
@@ -392,284 +494,94 @@ const Hero = () => {
     setIsVideoOpen(false);
   };
 
+  const nextSession = scheduleItems[0];
+
   return (
-    <div id="home" className="relative overflow-hidden bg-transparent">
-      {/* Soft accents only — page canvas is #F2F2F4 from Home */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.28]"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, rgba(17,24,39,0.04) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(17,24,39,0.04) 1px, transparent 1px)
-          `,
-          backgroundSize: "48px 48px",
-          maskImage:
-            "radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent)",
-        }}
-      />
-      <div className="pointer-events-none absolute -left-24 top-40 h-72 w-72 rounded-full bg-primary/[0.06] blur-3xl" />
-      <div className="pointer-events-none absolute -right-20 top-24 h-80 w-80 rounded-full bg-primary/[0.04] blur-3xl" />
-      <div className="pointer-events-none absolute right-1/4 top-[55%] h-64 w-64 rounded-full bg-secondary/20 blur-3xl" />
-
-      <section className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-14 sm:pb-20">
-        {/* ===== CENTERED HERO COPY ===== */}
+    <div id="home" className="relative overflow-hidden bg-white dark:bg-background">
+      <section className="relative overflow-hidden bg-[#ffffff] dark:bg-background">
         <div
-          className={`text-center max-w-3xl mx-auto transition-all duration-700 ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
+          aria-hidden
+          className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden"
         >
-          <a
-            href="#programs"
-            onClick={(e) => {
-              e.preventDefault();
-              document
-                .querySelector("#programs")
-                ?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="inline-flex items-center gap-2 rounded-full border border-primary/10 bg-white px-4 py-1.5 text-xs font-semibold text-foreground shadow-sm transition-colors hover:border-primary/30 sm:text-sm dark:border-border dark:bg-card dark:text-foreground"
-          >
-            <span className="h-2 w-2 rounded-full bg-primary" />
-            Free learning across Africa
-            <ArrowRight className="h-3.5 w-3.5 text-primary" />
-          </a>
-
-          <h1 className="mt-6 text-4xl font-black uppercase leading-[1.08] tracking-[-0.03em] text-foreground sm:text-5xl md:text-6xl lg:text-[3.75rem]">
-            <span className="block">Education without</span>
-            <span className="inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
-              <span>limits</span>
-              <span className="inline-flex shrink-0 -space-x-3">
-                <img
-                  src="/frontend.jpg"
-                  alt=""
-                  className="h-10 w-10 rounded-full border-[3px] border-background object-cover shadow-md sm:h-12 sm:w-12 lg:h-14 lg:w-14"
-                />
-                <img
-                  src="/Kofo.jpg"
-                  alt=""
-                  className="h-10 w-10 rounded-full border-[3px] border-background object-cover shadow-md sm:h-12 sm:w-12 lg:h-14 lg:w-14"
-                />
-              </span>
-              <span>
-                across <span className="text-primary">Africa</span>
-              </span>
-            </span>
-          </h1>
-
-          <form
-            onSubmit={handleJoin}
-            className="mx-auto mt-8 flex max-w-lg items-center gap-1.5 rounded-full border border-gray-200 bg-white p-1.5 shadow-xl shadow-indigo-900/5 dark:border-border dark:bg-card"
-          >
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Your email address"
-              className="min-w-0 flex-1 bg-transparent px-4 py-2.5 text-sm text-foreground outline-none placeholder:text-gray-400 dark:text-foreground dark:placeholder:text-muted-foreground"
-            />
-            <button
-              type="submit"
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-indigo-950 px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:scale-[1.02] hover:bg-primary active:scale-95 dark:bg-primary dark:hover:bg-primary/90"
-            >
-              Join Now
-              <ArrowRight className="h-3.5 w-3.5" />
-            </button>
-          </form>
-
-          <button
-            type="button"
-            onClick={handlePlayVideo}
-            className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-primary"
-          >
-            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/15 bg-card text-primary shadow-sm">
-              <PlayCircle className="h-4 w-4" />
-            </span>
-            Watch Demo
-          </button>
+          <span className="select-none text-[9rem] font-black leading-none tracking-[0.18em] text-[#14121c] opacity-[0.028] dark:text-white dark:opacity-[0.015] sm:text-[14rem] lg:text-[18rem]">
+            GYGI
+          </span>
         </div>
 
-        {/* ===== THREE FEATURE CARDS ===== */}
         <div
-          className={`mt-12 sm:mt-14 grid md:grid-cols-3 gap-4 sm:gap-5 transition-all duration-1000 delay-100 ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          className={`relative z-10 mx-auto max-w-6xl px-4 pb-12 pt-28 transition-all duration-700 min-[360px]:px-5 sm:px-8 sm:pt-32 lg:px-10 lg:pt-32 ${
+            visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           }`}
         >
-          {/* Left — analytics */}
-          <div className="rounded-[1.5rem] bg-white border border-gray-100 shadow-xl shadow-indigo-900/5 p-5 sm:p-6 flex flex-col">
-            <div className="flex items-center justify-between text-sm mb-4">
-              <span className="font-bold text-foreground dark:text-foreground">
-                Students
-              </span>
-              <span className="text-gray-400 text-xs font-medium dark:text-muted-foreground">
-                2030+ goal
-              </span>
-            </div>
-            <div className="flex items-end gap-2 mb-2">
-              <span className="text-4xl sm:text-5xl font-black text-foreground tracking-tight leading-none dark:text-foreground">
-                50K+
-              </span>
-              <span className="inline-flex items-center gap-0.5 text-emerald-500 text-sm font-bold mb-1">
-                <ArrowUp className="w-3.5 h-3.5" strokeWidth={3} />
-                soon
-              </span>
-            </div>
-            <p className="text-sm text-gray-500 leading-snug dark:text-muted-foreground">
-              The number of learners{" "}
-              <span className="font-bold text-foreground dark:text-foreground">
-                GYGI
-              </span>{" "}
-              aims to reach soon — on the path to 500K+ by 2030+.
-            </p>
-
-            <div className="mt-6 flex items-center justify-center gap-0 relative py-2">
-              <div className="absolute left-4 right-4 top-1/2 h-px border-t border-dashed border-primary/30" />
-              <img
-                src="/daniel.jpg"
-                alt=""
-                className="relative z-10 w-9 h-9 rounded-full object-cover border-2 border-white shadow"
-              />
-              <div className="relative z-10 mx-6 w-9 h-9 rounded-full bg-indigo-950 flex items-center justify-center shadow">
-                <PlayCircle className="w-4 h-4 text-white" />
-              </div>
-              <div className="relative z-10 w-9 h-9 rounded-full bg-primary flex items-center justify-center shadow">
-                <Check className="w-4 h-4 text-white" strokeWidth={3} />
-              </div>
-            </div>
-
-            <p className="mt-auto pt-4 text-xs text-gray-500 flex items-start gap-2">
-              <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-              Live classes, mentorship &amp; AI-powered recordings for every
-              student.
-            </p>
-          </div>
-
-          {/* Middle — Banner hero image */}
-          <div className="rounded-[1.5rem] bg-white border border-gray-100 shadow-xl shadow-indigo-900/5 overflow-hidden relative min-h-[320px] sm:min-h-[360px]">
-            <img
-              src="/Banner.jpg"
-              alt="Hope for the Girl Child — GYGI"
-              className="absolute inset-0 w-full h-full object-cover object-[70%_center]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/50 via-transparent to-transparent" />
-            <div className="absolute bottom-4 left-3 right-3">
-              <div className="flex items-center gap-2.5 bg-white/95 backdrop-blur-sm rounded-full pl-1.5 pr-1.5 py-1.5 shadow-lg">
-                <img
-                  src="/frontend.jpg"
-                  alt=""
-                  className="w-9 h-9 rounded-full object-cover"
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold text-foreground truncate">
-                    Hope for the Girl Child
-                  </p>
-                  <p className="text-[10px] text-gray-500 font-medium">
-                    Girls You Got It
-                  </p>
-                </div>
-                <a
-                  href="tel:+2349064950175"
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-950 text-white transition-colors hover:bg-primary"
-                  aria-label="Call GYGI"
-                >
-                  <Phone className="h-3.5 w-3.5" />
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Right — schedule */}
-          <div className="rounded-[1.5rem] bg-white border border-gray-100 shadow-xl shadow-indigo-900/5 p-5 sm:p-6 flex flex-col">
-            <div className="flex items-center justify-between text-sm mb-4">
-              <span className="font-bold text-foreground">Wed</span>
-              <span className="text-gray-400 text-xs font-medium">
-                Live schedule
-              </span>
-            </div>
-
-            <div className="space-y-0 flex-1">
-              {scheduleItems.map((item, i) => (
-                <div
-                  key={item.name}
-                  className={`flex items-start gap-3 py-3 ${
-                    i < scheduleItems.length - 1
-                      ? "border-b border-dashed border-gray-200"
-                      : ""
-                  }`}
-                >
-                  <img
-                    src={item.avatar}
-                    alt=""
-                    className="w-8 h-8 rounded-full object-cover shrink-0 mt-0.5"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs sm:text-sm font-bold text-foreground truncate">
-                      {item.name}
-                    </p>
-                    <p className="text-[11px] text-gray-400 mt-0.5">
-                      {item.time}
-                    </p>
-                  </div>
-                  <span className="text-[10px] font-bold text-gray-400 shrink-0">
-                    {item.duration}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-4 pt-3">
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 mb-2">
-                Managed by
+          <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-6">
+            <div className="mx-auto w-full max-w-xl text-center lg:mx-0 lg:text-left">
+              <h1 className="text-[clamp(1.2rem,7.6vw,3.65rem)] font-extrabold leading-[1.18] tracking-[-0.03em] text-foreground min-[390px]:text-[clamp(1.9rem,9.4vw,3.65rem)] sm:leading-[1.12] lg:text-[clamp(2.6rem,4vw,3.5rem)] lg:leading-[1.08]">
+                Free Education
+                <br />
+                without limits
+                <br />
+                <span className="text-primary">across Africa.</span>
+              </h1>
+              <p className="mx-auto mt-5 max-w-sm text-sm leading-relaxed text-muted-foreground sm:mt-6 sm:text-[15px] lg:mx-0">
+                Dive into free live classes, mentorship, and dignity programs.
+                Always free, always excellent, for 50K+ learners.
               </p>
-              <div className="flex items-center gap-2.5 bg-gray-50 rounded-full pl-1.5 pr-1.5 py-1.5 border border-gray-100">
-                <img
-                  src="/CEO.jpg"
-                  alt=""
-                  className="w-8 h-8 rounded-full object-cover"
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-bold text-foreground">Teniade</p>
-                  <p className="text-[10px] text-gray-500">CEO</p>
-                </div>
-                <a
-                  href="tel:+2349064950175"
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-950 text-white transition-colors hover:bg-primary"
-                  aria-label="Call GYGI"
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-4 sm:mt-7 lg:justify-start">
+                <button
+                  type="button"
+                  onClick={() => navigate("/register")}
+                  className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background transition hover:bg-primary hover:text-primary-foreground"
                 >
-                  <Phone className="h-3 w-3" />
-                </a>
+                  Get Started
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={handlePlayVideo}
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-foreground transition hover:text-primary"
+                >
+                  <PlayCircle className="h-4 w-4" />
+                  Watch
+                </button>
               </div>
+              <p className="mt-3 text-[12px] font-medium text-muted-foreground">
+                Next live class · {nextSession.name.replace("Live class: ", "")} ·{" "}
+                {nextSession.time}
+              </p>
             </div>
-          </div>
-        </div>
 
-        {/* ===== 10X / IMPACT BANNER + ORBS ===== */}
-        <div
-          className={`mt-4 sm:mt-5 grid md:grid-cols-3 gap-4 sm:gap-5 transition-all duration-1000 delay-200 ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-          }`}
-        >
-          <div className="md:col-span-2 relative rounded-[1.5rem] bg-white border border-gray-100 shadow-xl shadow-indigo-900/5 overflow-hidden px-6 sm:px-8 py-7 sm:py-8 flex items-center gap-5 sm:gap-8">
-            <div className="pointer-events-none absolute -right-8 -top-8 w-40 h-40 rounded-3xl bg-sky-200/40 rotate-12 blur-sm" />
-            <div className="pointer-events-none absolute right-10 bottom-0 w-28 h-28 rounded-2xl bg-primary/10 -rotate-6" />
-            <p className="relative z-10 shrink-0 text-5xl font-black leading-none tracking-tight text-foreground sm:text-6xl lg:text-7xl dark:text-foreground">
-              14
-            </p>
-            <p className="relative z-10 max-w-md text-sm leading-relaxed text-gray-500 sm:text-base dark:text-muted-foreground">
-              Countries reached with free, proven{" "}
-              <span className="font-bold text-foreground dark:text-foreground">
-                live learning &amp; mentorship
-              </span>{" "}
-              for African students.
-            </p>
+            <GygiOrbit />
           </div>
 
-          {/* Decorative abstract shapes card (fills 3rd column like reference balance) */}
-          <div className="hidden md:block relative rounded-[1.5rem] bg-gradient-to-br from-sky-100/80 to-primary/10 border border-white overflow-hidden min-h-[120px]">
-            <div className="absolute left-6 top-6 w-20 h-20 rounded-2xl bg-white/70 shadow-lg rotate-6" />
-            <div className="absolute right-8 bottom-5 w-24 h-16 rounded-2xl bg-primary/20 -rotate-3" />
-            <div className="absolute left-1/3 top-1/2 w-14 h-14 rounded-full bg-sky-300/40 blur-sm" />
+          <div className="mt-6 flex flex-wrap items-center gap-3 sm:mt-2 sm:gap-4">
+            <p className="text-sm font-semibold text-foreground">GYGI programs</p>
+            <div className="flex items-center gap-2">
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#e7f6f1] text-[#145244]">
+                <GraduationCap className="h-5 w-5" />
+              </span>
+              <span className="flex h-11 w-14 items-center justify-center overflow-hidden rounded-xl bg-[#f6c945]">
+                <img src="/Kofo.jpg" alt="" className="h-full w-full object-cover" />
+              </span>
+              <span className="flex h-11 items-center gap-2 rounded-xl bg-[#efe4fb] px-2 text-[#4c1d78]">
+                <span className="grid grid-cols-3 gap-0.5">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <span key={i} className="h-1.5 w-1.5 rounded-[2px] bg-[#4c1d78]" />
+                  ))}
+                </span>
+                <Sparkles className="h-4 w-4" />
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() =>
+                document
+                  .querySelector("#programs")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+              className="text-sm font-medium text-black underline underline-offset-2 transition hover:text-primary sm:ml-auto"
+            >
+              Learn more
+            </button>
           </div>
         </div>
       </section>

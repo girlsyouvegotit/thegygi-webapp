@@ -13,7 +13,7 @@ import { organizationJsonLd, PAGE_SEO, websiteJsonLd } from "@/lib/seo";
 
 const Home = () => {
   return (
-    <div className="public-marketing font-sans bg-[#F2F2F4] text-foreground dark:bg-background">
+    <div className="public-marketing font-sans bg-white text-foreground dark:bg-background">
       <PageSeo
         title={PAGE_SEO.home.title}
         description={PAGE_SEO.home.description}
@@ -22,7 +22,7 @@ const Home = () => {
         jsonLd={[organizationJsonLd(), websiteJsonLd()]}
       />
       <Navbar />
-      <main className="bg-[#F2F2F4] dark:bg-background">
+      <main className="bg-white dark:bg-background">
         <Hero />
         <CommunityDriven />
         <Tutors />
