@@ -58,6 +58,17 @@ export const PAGE_SEO = {
   },
 } as const;
 
+const PUBLIC_SITE_URL = "https://www.gygi.org";
+
+function isLocalOrigin(url: string): boolean {
+  try {
+    const host = new URL(url).hostname;
+    return host === "localhost" || host === "127.0.0.1" || host.endsWith(".local");
+  } catch {
+    return false;
+  }
+}
+
 export function getSiteUrl(): string {
   const fromEnv = (import.meta.env.VITE_SITE_URL as string | undefined)?.replace(
     /\/$/,
@@ -67,7 +78,18 @@ export function getSiteUrl(): string {
   if (typeof window !== "undefined" && window.location?.origin) {
     return window.location.origin;
   }
-  return "https://girlsyougotit.org";
+  return PUBLIC_SITE_URL;
+}
+
+/** Share links always use the public site, even when the page is open on localhost. */
+export function getShareUrl(path: string): string {
+  const fromEnv = (import.meta.env.VITE_SITE_URL as string | undefined)?.replace(
+    /\/$/,
+    "",
+  );
+  const origin = fromEnv && !isLocalOrigin(fromEnv) ? fromEnv : PUBLIC_SITE_URL;
+  const normalized = path.startsWith("/") ? path : `/${path}`;
+  return `${origin}${normalized}`;
 }
 
 export function absoluteUrl(pathOrUrl: string): string {

@@ -7,7 +7,7 @@ import { format } from "date-fns";
 import { ArrowLeft, ArrowRight, Loader2, Link2 } from "lucide-react";
 import { toast } from "sonner";
 import { PageSeo } from "@/components/seo/PageSeo";
-import { absoluteUrl, getSiteUrl, organizationJsonLd } from "@/lib/seo";
+import { absoluteUrl, getShareUrl, getSiteUrl, organizationJsonLd } from "@/lib/seo";
 
 interface Post {
   title: string;
@@ -79,7 +79,9 @@ const BlogPost = () => {
 
   const copyLink = async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href);
+      await navigator.clipboard.writeText(
+        getShareUrl(`/blog/${slug || ""}`),
+      );
       toast.success("Link copied");
     } catch {
       toast.error("Could not copy link");

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   Facebook,
   Instagram,
@@ -8,6 +8,7 @@ import {
   Mail,
   User,
   ArrowRight,
+  ArrowUp,
   CheckCircle2,
   PartyPopper,
   MapPin,
@@ -33,25 +34,16 @@ type GetInvolvedInterest = (typeof GET_INVOLVED_INTERESTS)[number];
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  const footerRef = useRef<HTMLElement>(null);
-  const [showThread, setShowThread] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
-    const footer = footerRef.current;
-    if (!footer) return;
-
     const onScroll = () => {
-      const rect = footer.getBoundingClientRect();
-      setShowThread(rect.top < window.innerHeight && rect.bottom > 0);
+      setShowBackToTop(window.scrollY > 480);
     };
 
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   // Newsletter state
@@ -206,7 +198,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer ref={footerRef} className="relative bg-[#050505] overflow-hidden">
+    <footer className="relative bg-[#050505] overflow-hidden">
       {/* ============================================ */}
       {/* LAYERED BACKGROUND EFFECTS */}
       {/* ============================================ */}
@@ -515,42 +507,18 @@ const Footer = () => {
       <button
         type="button"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className={`fixed right-2 top-20 z-30 text-primary transition-all duration-500 sm:right-5 ${
-          showThread
+        className={`fixed bottom-6 right-5 z-40 inline-flex items-center gap-2 rounded-full border border-slate-200/90 bg-white/95 py-2.5 pl-3 pr-4 text-slate-900 shadow-[0_10px_30px_rgba(15,23,42,0.14)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_14px_34px_rgba(15,23,42,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/20 dark:border-white/10 dark:bg-[#1c1826]/95 dark:text-white dark:shadow-[0_10px_30px_rgba(0,0,0,0.45)] ${
+          showBackToTop
             ? "translate-y-0 opacity-100"
-            : "pointer-events-none -translate-y-6 opacity-0"
+            : "pointer-events-none translate-y-3 opacity-0"
         }`}
         aria-label="Back to top"
-        tabIndex={showThread ? 0 : -1}
+        tabIndex={showBackToTop ? 0 : -1}
       >
-        <svg
-          viewBox="0 0 48 168"
-          className="h-[18vh] max-h-40 w-12"
-          aria-hidden
-          fill="none"
-        >
-          <path d="M24 4L27.6 18H20.4L24 4Z" fill="currentColor" />
-          <path
-            d="M24 16V34"
-            stroke="currentColor"
-            strokeWidth="1.9"
-            strokeLinecap="round"
-          />
-          <ellipse
-            cx="24"
-            cy="42"
-            rx="3.4"
-            ry="6.2"
-            stroke="currentColor"
-            strokeWidth="1.35"
-          />
-          <path
-            d="M24 48C18 72 32 88 24 112C16 136 32 150 24 158"
-            stroke="currentColor"
-            strokeWidth="1.35"
-            strokeLinecap="round"
-          />
-        </svg>
+        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-white dark:bg-white dark:text-slate-900">
+          <ArrowUp className="h-3.5 w-3.5" strokeWidth={2.25} />
+        </span>
+        <span className="text-[12px] font-semibold tracking-wide">Top</span>
       </button>
 
       {/* ============================================ */}
