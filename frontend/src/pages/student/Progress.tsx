@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { useAuth } from "@/hooks/useAuthContext";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
+import { timeOfDayGreeting } from "@/lib/greeting";
 import { PageListSkeleton } from "@/components/loading/PageSkeleton";
 import {
   Calendar,
@@ -192,7 +193,7 @@ const Progress = () => {
           </Avatar>
           <div className="min-w-0">
             <p className="text-[11px] text-gray-400 font-medium">
-              Welcome back, {firstName}
+              {timeOfDayGreeting()}, {firstName}
             </p>
             <h1 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
               My Progress

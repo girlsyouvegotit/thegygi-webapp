@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
+import { timeOfDayGreeting } from "@/lib/greeting";
 import {
   Users,
   GraduationCap,
@@ -302,7 +303,7 @@ const Analytics = () => {
       </header>
 
       <p className="text-sm text-slate-500 mb-5 sm:mb-6">
-        Welcome back,{" "}
+        {timeOfDayGreeting()},{" "}
         <span className="text-slate-900 font-semibold">
           {getFirstName(user?.name)}
         </span>

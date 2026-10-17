@@ -22,6 +22,7 @@ import {
   Banknote,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { timeOfDayGreeting } from "@/lib/greeting";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { RoleDashboardSkeleton } from "@/components/loading/PageSkeleton";
 import OccasionToast from "@/components/occasions/OccasionToast";
@@ -174,12 +175,7 @@ const getInitials = (name?: string): string => {
     .slice(0, 2);
 };
 
-const getGreeting = (): string => {
-  const hour = new Date().getHours();
-  if (hour < 12) return "Good morning";
-  if (hour < 17) return "Good afternoon";
-  return "Good evening";
-};
+const getGreeting = (): string => timeOfDayGreeting();
 
 const sparkFromClasses = (classes: liveClass[], bucketCount = 7): number[] => {
   const counts = new Array(bucketCount).fill(0);

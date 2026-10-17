@@ -9,6 +9,7 @@ import {
   RefreshCw,
   ArrowUpRight,
   ArrowDownRight,
+  ChevronRight,
 } from "lucide-react";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
@@ -751,18 +752,26 @@ export default function AlumniOpsPage() {
                     Live job feed
                   </h2>
                   <p className="mt-0.5 text-[11px] text-slate-400">
-                    What graduates see — tap side cards or arrows to flip
+                    What graduates see — swipe sideways through the matches
                   </p>
                 </div>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  className="rounded-full bg-white"
-                  onClick={() => setTab("jobs")}
-                >
-                  See all
-                </Button>
+                <div className="flex shrink-0 items-center gap-2">
+                  {jobs.length > 1 ? (
+                    <span className="inline-flex items-center gap-0.5 text-[11px] font-black tracking-wide text-[#9b2ec4] uppercase">
+                      Swipe
+                      <ChevronRight className="h-4 w-4 animate-pulse" />
+                    </span>
+                  ) : null}
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    className="rounded-full bg-white"
+                    onClick={() => setTab("jobs")}
+                  >
+                    See all
+                  </Button>
+                </div>
               </div>
               {jobsLoading ? (
                 <div className="flex items-center gap-2 py-10 text-xs text-slate-400">
@@ -770,8 +779,15 @@ export default function AlumniOpsPage() {
                   Loading feed…
                 </div>
               ) : jobs[0] ? (
-                <div className="relative z-0 mx-auto max-w-lg overflow-visible">
-                  <JobMatchCard jobs={jobs.slice(0, 5)} stacked />
+                <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  {jobs.slice(0, 8).map((job) => (
+                    <div
+                      key={job.id}
+                      className="w-[min(100%,22rem)] shrink-0 snap-center"
+                    >
+                      <JobMatchCard job={job} stacked={false} />
+                    </div>
+                  ))}
                 </div>
               ) : (
                 <p className="py-8 text-center text-xs text-slate-400">

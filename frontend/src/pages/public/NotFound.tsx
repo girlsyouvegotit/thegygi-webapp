@@ -112,7 +112,7 @@ export default function NotFound() {
   );
 }
 
-function Cloud({ className }: { className?: string }) {
+export function Cloud({ className }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 200 80"
@@ -128,7 +128,7 @@ function Cloud({ className }: { className?: string }) {
 }
 
 /** Friendly lost learner — soft 3D-ish SVG in GYGI magenta/violet. */
-function LostLearnerMascot({ className }: { className?: string }) {
+export function LostLearnerMascot({ className }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 240 260"

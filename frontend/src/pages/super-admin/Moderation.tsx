@@ -213,7 +213,7 @@ const SuperAdminModeration = () => {
           value={overview?.stats.muted ?? 0}
         />
         <StatPill
-          className="md:col-span-3 xl:col-span-1"
+          className="col-span-2 md:col-span-3 xl:col-span-1"
           label="Warnings (30d)"
           value={overview?.stats.warnings30d ?? 0}
         />
@@ -280,7 +280,7 @@ const SuperAdminModeration = () => {
               : "Select a person from the list"}
           </p>
 
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
             {(
               [
                 ["message", "Message", "primary"],
@@ -295,6 +295,7 @@ const SuperAdminModeration = () => {
                 key={key}
                 tone={tone}
                 className={cn(
+                  "w-full justify-center",
                   action === key && "ring-2 ring-[#c147e9]/40",
                 )}
                 onClick={() => {

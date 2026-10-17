@@ -4,6 +4,7 @@ import {
   getFees,
   updateFee,
   deleteFee,
+  clearFinanceRecords,
 } from "../controllers/finance/fee.controller.js";
 import {
   createExpense,
@@ -23,6 +24,7 @@ import { adminOnly } from "../middleware/role.middleware.js";
 const router = express.Router();
 router.use(protect, adminOnly);
 
+router.post("/clear", clearFinanceRecords);
 router.post("/fees", createFee);
 router.get("/fees", getFees);
 router.put("/fees/:id", updateFee);

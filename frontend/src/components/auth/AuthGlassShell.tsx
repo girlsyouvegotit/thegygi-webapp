@@ -77,6 +77,57 @@ export type AuthFeatureCard = {
   onClick?: () => void;
 };
 
+const FEATURE_SPOTS = [
+  "left-28 top-[16%] w-56",
+  "right-[4%] top-[14%] w-52",
+  "right-[6%] bottom-[14%] w-60",
+];
+
+const FEATURE_TONES = [
+  "bg-white",
+  "bg-[#F8E4D4]",
+  "bg-[#E7F1FB]",
+] as const;
+
+function FeatureCard({
+  card,
+  tone,
+}: {
+  card: AuthFeatureCard;
+  tone: (typeof FEATURE_TONES)[number];
+}) {
+  const inner = (
+    <>
+      <div className="flex items-center gap-2 text-slate-700">
+        <span className="text-slate-500">{card.icon}</span>
+        <p className="text-sm font-semibold tracking-tight">{card.title}</p>
+      </div>
+      <p className="mt-1.5 text-xs leading-relaxed text-slate-500">
+        {card.description}
+      </p>
+    </>
+  );
+  const cls = cn(
+    "block w-full rounded-[1.35rem] p-4 text-left shadow-[0_16px_40px_rgba(30,40,60,0.12)] transition hover:-translate-y-0.5",
+    tone,
+  );
+  if (card.to) {
+    return (
+      <Link to={card.to} className={cls}>
+        {inner}
+      </Link>
+    );
+  }
+  if (card.onClick) {
+    return (
+      <button type="button" onClick={card.onClick} className={cls}>
+        {inner}
+      </button>
+    );
+  }
+  return <div className={cls}>{inner}</div>;
+}
+
 type Props = {
   title: string;
   subtitle?: string;
@@ -159,24 +210,19 @@ export default function AuthGlassShell({
             ))}
           </MapContainer>
         ) : null}
-        {/* Soft dim only — keep Africa map readable */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-black/60" />
+        <div className="pointer-events-none absolute inset-0 bg-white/25" />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 50% 35% at 50% 15%, rgba(193,71,233,0.18), transparent 55%), radial-gradient(ellipse 35% 30% at 90% 90%, rgba(91,95,239,0.12), transparent 50%)",
-          }}
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/35 via-transparent to-white/45"
         />
       </div>
 
       <div className="absolute right-4 top-4 z-30 sm:right-6 sm:top-5">
-        <ThemeToggle className="bg-white/10 text-white hover:bg-white/20 hover:text-white" />
+        <ThemeToggle className="bg-white text-slate-700 shadow-[0_10px_30px_rgba(30,40,60,0.12)] hover:bg-white" />
       </div>
 
       {/* Slim side rail — desktop */}
-      <aside className="absolute top-4 bottom-4 left-4 z-20 hidden w-[4.25rem] flex-col items-center rounded-[1.75rem] border border-white/10 bg-black/35 py-4 backdrop-blur-xl lg:flex">
+      <aside className="absolute top-4 bottom-4 left-4 z-20 hidden w-[4.25rem] flex-col items-center rounded-[1.75rem] border border-white/80 bg-white/90 py-4 shadow-[0_18px_50px_rgba(30,40,60,0.12)] lg:flex">
         <Link to="/" className="mb-6" title="GYGI home">
           <img
             src={gygiLogo}
@@ -207,54 +253,60 @@ export default function AuthGlassShell({
         </nav>
         <Link
           to="/"
-          className="mt-auto flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#c147e9] to-[#5B5FEF] text-xs font-black text-white shadow-lg shadow-primary/30"
+          className="mt-auto flex h-10 w-10 items-center justify-center rounded-full bg-[#E7F1FB] text-xs font-black text-[#1d4e89]"
           title="GYGI"
         >
           G
         </Link>
       </aside>
 
+      {features?.length ? (
+        <div className="pointer-events-none absolute inset-0 z-20 hidden xl:block">
+          {features.slice(0, 3).map((card, index) => (
+            <div
+              key={card.title}
+              className={cn(
+                "pointer-events-auto absolute",
+                FEATURE_SPOTS[index],
+              )}
+            >
+              <FeatureCard card={card} tone={FEATURE_TONES[index]} />
+            </div>
+          ))}
+        </div>
+      ) : null}
+
       {/* Main stage */}
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-10 sm:px-6 lg:pl-28">
-        {/* Mobile brand */}
-        <Link
-          to="/"
-          className="mb-6 flex items-center gap-2.5 lg:hidden"
-        >
+        <Link to="/" className="mb-5 flex items-center gap-2.5 lg:hidden">
           <img
             src={gygiLogo}
             alt="GYGI"
-            className="h-9 w-9 rounded-xl object-cover ring-1 ring-white/25"
+            className="h-9 w-9 rounded-xl object-cover shadow-sm ring-1 ring-white"
           />
-          <span className="text-lg font-black text-white">
-            GYGI<span className="text-[#c147e9]">.</span>
+          <span className="text-lg font-semibold text-slate-900">
+            GYGI<span className="text-[#7eb0de]">.</span>
           </span>
         </Link>
 
-        {/* Tracking eye */}
-        <div className="relative mb-5 flex h-28 w-28 items-center justify-center sm:mb-6 sm:h-32 sm:w-32">
-          <div
-            aria-hidden
-            className="absolute inset-0 rounded-full bg-[#c147e9]/25 blur-3xl"
-          />
+        <div className="relative mb-4 flex h-28 w-28 items-center justify-center sm:h-32 sm:w-32">
           <TrackingEye />
         </div>
 
-        <p className="text-sm font-medium text-white/45 sm:text-base">
-          {greeting}
-        </p>
-        <h1 className="mt-1 max-w-lg text-center text-3xl font-black tracking-tight text-white sm:text-4xl">
-          {title}
-        </h1>
-        {subtitle ? (
-          <p className="mt-2 max-w-md text-center text-sm text-white/45">
-            {subtitle}
-          </p>
-        ) : null}
+        <div className="max-w-lg rounded-[1.6rem] bg-white/75 px-6 py-4 text-center shadow-[0_16px_40px_rgba(30,40,60,0.08)] backdrop-blur-md">
+          <p className="text-sm font-medium text-slate-500">{greeting}</p>
+          <h1 className="mt-1 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+            {title}
+          </h1>
+          {subtitle ? (
+            <p className="mt-2 text-sm leading-relaxed text-slate-500">
+              {subtitle}
+            </p>
+          ) : null}
+        </div>
 
-        {/* Tabs */}
         {tabs?.length ? (
-          <div className="mt-6 flex gap-1 rounded-full border border-white/10 bg-black/30 p-1 backdrop-blur-xl">
+          <div className="mt-5 flex gap-1 rounded-full bg-white/90 p-1 shadow-[0_10px_30px_rgba(30,40,60,0.1)]">
             {tabs.map((tab) => {
               const active = tab.id === activeTab;
               return (
@@ -262,10 +314,10 @@ export default function AuthGlassShell({
                   key={tab.id}
                   to={tab.to}
                   className={cn(
-                    "rounded-full px-5 py-2 text-xs font-bold transition sm:text-sm",
+                    "rounded-full px-5 py-2 text-xs font-semibold transition sm:text-sm",
                     active
-                      ? "bg-[#c147e9] text-white shadow-md shadow-primary/30"
-                      : "text-white/45 hover:text-white",
+                      ? "bg-[#E7F1FB] text-[#1d4e89]"
+                      : "text-slate-500 hover:text-slate-800",
                   )}
                 >
                   {tab.label}
@@ -275,11 +327,9 @@ export default function AuthGlassShell({
           </div>
         ) : null}
 
-        {/* Glass form panel */}
         <div
           className={cn(
-            "mt-6 w-full rounded-[1.75rem] border border-white/12 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.45)]",
-            "bg-white/[0.06] backdrop-blur-2xl supports-[backdrop-filter]:bg-white/[0.05]",
+            "mt-5 w-full rounded-[1.75rem] bg-white p-5 shadow-[0_24px_60px_rgba(30,40,60,0.14)] sm:p-6",
             wide ? "max-w-xl" : "max-w-lg",
             className,
           )}
@@ -287,60 +337,20 @@ export default function AuthGlassShell({
           {children}
         </div>
 
-        {/* Feature cards */}
         {features?.length ? (
-          <div
-            className={cn(
-              "mt-5 grid w-full gap-3",
-              features.length >= 3
-                ? "max-w-3xl grid-cols-1 sm:grid-cols-3"
-                : "max-w-lg grid-cols-1 sm:grid-cols-2",
-            )}
-          >
-            {features.map((card) => {
-              const inner = (
-                <>
-                  <span className="mb-2 flex h-9 w-9 items-center justify-center rounded-xl bg-[#c147e9]/15 text-[#e879f9]">
-                    {card.icon}
-                  </span>
-                  <p className="text-sm font-bold text-white">{card.title}</p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-white/40">
-                    {card.description}
-                  </p>
-                </>
-              );
-              const cls =
-                "rounded-2xl border border-white/10 bg-white/[0.05] p-4 text-left backdrop-blur-xl transition hover:border-[#c147e9]/35 hover:bg-white/[0.08]";
-              if (card.to) {
-                return (
-                  <Link key={card.title} to={card.to} className={cls}>
-                    {inner}
-                  </Link>
-                );
-              }
-              if (card.onClick) {
-                return (
-                  <button
-                    key={card.title}
-                    type="button"
-                    onClick={card.onClick}
-                    className={cls}
-                  >
-                    {inner}
-                  </button>
-                );
-              }
-              return (
-                <div key={card.title} className={cls}>
-                  {inner}
-                </div>
-              );
-            })}
+          <div className="mt-4 grid w-full max-w-lg gap-3 xl:hidden">
+            {features.map((card, index) => (
+              <FeatureCard
+                key={card.title}
+                card={card}
+                tone={FEATURE_TONES[index % FEATURE_TONES.length]}
+              />
+            ))}
           </div>
         ) : null}
 
-        <p className="mt-6 flex items-center gap-2 text-[11px] text-white/30">
-          <GraduationCap className="h-3.5 w-3.5 text-[#c147e9]/70" />
+        <p className="mt-6 flex items-center gap-2 rounded-full bg-white/80 px-3 py-1.5 text-[11px] font-medium text-slate-500 shadow-sm">
+          <GraduationCap className="h-3.5 w-3.5 text-[#5b93c9]" />
           Free excellent education across Africa
         </p>
       </div>
@@ -380,8 +390,8 @@ function RailLink({
       className={cn(
         "flex h-10 w-10 items-center justify-center rounded-full transition",
         active
-          ? "bg-[#c147e9] text-white shadow-lg shadow-primary/35"
-          : "text-white/45 hover:bg-white/10 hover:text-white",
+          ? "bg-[#E7F1FB] text-[#1d4e89] shadow-sm"
+          : "text-slate-400 hover:bg-slate-50 hover:text-slate-700",
       )}
     >
       {icon}
@@ -395,21 +405,20 @@ export const authFieldClass = (
   withToggle?: boolean,
 ) =>
   cn(
-    "gygi-auth-field w-full rounded-2xl border bg-[#0c0a14]/80 py-3.5 pl-11 text-sm text-white caret-white placeholder:text-white/35 outline-none transition backdrop-blur-md",
+    "gygi-auth-field w-full rounded-2xl border bg-[#f4f7fb] py-3.5 pl-11 text-sm text-slate-800 caret-slate-800 placeholder:text-slate-400 outline-none transition",
     withToggle ? "pr-12" : "pr-4",
     error
-      ? "border-rose-400/50 ring-2 ring-rose-400/20"
+      ? "border-rose-300 ring-2 ring-rose-100"
       : focused
-        ? "border-[#c147e9]/70 ring-2 ring-[#c147e9]/25 bg-[#0c0a14]/90"
-        : "border-white/20 hover:border-white/35",
+        ? "border-[#9ec4ea] bg-white ring-2 ring-[#d7ebf8]"
+        : "border-slate-200/80 hover:border-slate-300",
   );
 
-/** High-contrast password show/hide control for dark glass fields */
 export const authEyeBtnClass =
-  "absolute right-2 top-1/2 z-30 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-xl bg-[#2a2438] text-white shadow-md ring-1 ring-white/50 transition hover:bg-[#3a3350] hover:ring-white/70";
+  "absolute right-2 top-1/2 z-30 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-xl bg-white text-slate-500 shadow-sm ring-1 ring-slate-200 transition hover:text-slate-800";
 
 export const authLabelClass =
-  "text-[11px] font-bold tracking-[0.12em] text-white/40 uppercase";
+  "text-xs font-medium text-slate-500";
 
 export const authPrimaryBtnClass =
-  "flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#c147e9] via-[#b03ad4] to-[#5B5FEF] px-6 py-3.5 text-sm font-bold text-white shadow-[0_12px_36px_rgba(193,71,233,0.4)] transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50";
+  "flex w-full items-center justify-center gap-2 rounded-full bg-[#c5dff6] px-6 py-3.5 text-sm font-semibold text-[#1d4e89] transition hover:bg-[#b7d4f0] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50";

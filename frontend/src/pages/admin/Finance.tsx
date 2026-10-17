@@ -33,7 +33,9 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/hooks/useAuthContext";
 import { api } from "@/lib/api";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { timeOfDayGreeting } from "@/lib/greeting";
 import type { Expense, Fee, Salary as SalaryType } from "@/types";
 
 type FinanceTab = "overview" | "fees" | "expenses" | "salary";
@@ -69,6 +71,10 @@ const glass =
 const Finance = () => {
   const { user } = useAuth();
   const [tab, setTab] = useState<FinanceTab>("overview");
+  const [clearTarget, setClearTarget] = useState<
+    "fees" | "expenses" | "salaries" | "all" | null
+  >(null);
+  const [clearing, setClearing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [fees, setFees] = useState<Fee[]>([]);
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -78,11 +84,15 @@ const Finance = () => {
     expenses: true,
     salaries: true,
   });
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const id = window.setInterval(() => setNow(new Date()), 1000);
+    return () => window.clearInterval(id);
+  }, []);
 
   const firstName = user?.name?.split(" ")[0] || "Admin";
-  const hour = new Date().getHours();
-  const greeting =
-    hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+  const greeting = timeOfDayGreeting(now);
 
   const fetchOverview = useCallback(async () => {
     setLoading(true);
@@ -105,6 +115,57 @@ const Finance = () => {
   useEffect(() => {
     void fetchOverview();
   }, [fetchOverview]);
+
+  const clearCopy: Record<
+    "fees" | "expenses" | "salaries" | "all",
+    string
+  > = {
+    fees: "This permanently deletes every fee record. Students, classes, and recordings stay.",
+    expenses:
+      "This permanently deletes every expense record. Students, classes, and recordings stay.",
+    salaries:
+      "This permanently deletes every salary record. Students, classes, and recordings stay.",
+    all: "This permanently deletes every fee, expense, and salary record. Students, classes, and recordings stay.",
+  };
+
+  const sectionIsEmpty = (
+    section: "fees" | "expenses" | "salaries" | "all",
+  ) => {
+    if (section === "fees") return fees.length === 0;
+    if (section === "expenses") return expenses.length === 0;
+    if (section === "salaries") return salaries.length === 0;
+    return fees.length === 0 && expenses.length === 0 && salaries.length === 0;
+  };
+
+  const confirmClear = async () => {
+    if (!clearTarget) return;
+    if (sectionIsEmpty(clearTarget)) {
+      toast.success(
+        clearTarget === "all"
+          ? "All finances have already been cleared."
+          : "This section has already been cleared.",
+      );
+      setClearTarget(null);
+      return;
+    }
+    setClearing(true);
+    try {
+      const { data } = await api.post("/finance/clear", { section: clearTarget });
+      toast.success(data.message || "Finance records cleared");
+      setClearTarget(null);
+      await fetchOverview();
+    } catch (error: unknown) {
+      const message =
+        error &&
+        typeof error === "object" &&
+        "response" in error &&
+        (error as { response?: { data?: { message?: string } } }).response?.data
+          ?.message;
+      toast.error(message || "Could not clear finance records");
+    } finally {
+      setClearing(false);
+    }
+  };
 
   const metrics = useMemo(() => {
     const totalFees = fees.reduce((s, f) => s + (f.amount || 0), 0);
@@ -273,30 +334,83 @@ const Finance = () => {
         </p>
       </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <div
-              className={cn(
-                glass,
-                "flex items-center gap-2 px-3.5 py-2 text-sm text-slate-600",
-              )}
-            >
-              <span className="tabular-nums">
-                {format(new Date(), "MMM.dd.yyyy")}
+          <div className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-stretch overflow-hidden rounded-[24px] border border-white/60 bg-white/70 shadow-[0_8px_32px_rgba(31,38,135,0.08)] backdrop-blur-xl xl:w-auto">
+            <div className="flex items-center whitespace-nowrap px-3 text-xs font-semibold text-slate-800 sm:px-4 sm:text-sm">
+              <span>{format(now, "do 'of' MMM, yyyy")}</span>
+              <span className="mx-1.5 font-medium text-slate-400">·</span>
+              <span className="font-medium tabular-nums text-slate-600">
+                {now.toLocaleTimeString(undefined, {
+                  hour: "numeric",
+                  minute: "2-digit",
+                  second: "2-digit",
+                })}
               </span>
             </div>
             <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                const section =
+                  tab === "fees"
+                    ? "fees"
+                    : tab === "expenses"
+                      ? "expenses"
+                      : tab === "salary"
+                        ? "salaries"
+                        : "all";
+                if (sectionIsEmpty(section)) {
+                  toast.success(
+                    section === "all"
+                      ? "All finances have already been cleared."
+                      : "This section has already been cleared.",
+                  );
+                  return;
+                }
+                setClearTarget(section);
+              }}
+              className="h-10 min-w-0 rounded-none border-y-0 border-r-0 border-l border-white/70 bg-transparent px-3 text-xs text-rose-700 shadow-none hover:bg-rose-50 sm:px-4 sm:text-sm"
+            >
+              <span className="truncate">
+                {tab === "overview" ? "Clear all finances" : "Clear this section"}
+              </span>
+            </Button>
+            <Button
               variant="outline"
               onClick={exportCsv}
-              className={cn(
-                glass,
-                "h-10 gap-2 border-white/60 bg-white/70 text-slate-700 hover:bg-white/90",
-              )}
+              className="h-10 rounded-none border-y-0 border-r-0 border-l border-white/70 bg-transparent px-3 text-xs text-slate-700 shadow-none hover:bg-white/90 sm:px-4 sm:text-sm"
             >
-              <Download className="h-4 w-4" />
-              Export Report
+              <Download className="h-4 w-4 shrink-0" />
+              <span className="hidden sm:inline">Export Report</span>
+              <span className="sm:hidden">Export</span>
             </Button>
           </div>
         </div>
+
+        {clearTarget ? (
+          <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-4 text-sm text-rose-900">
+            <p className="font-semibold">Clear {clearTarget === "all" ? "all finance records" : clearTarget}?</p>
+            <p className="mt-1 text-rose-800">{clearCopy[clearTarget]}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Button
+                type="button"
+                disabled={clearing}
+                onClick={() => void confirmClear()}
+                className="rounded-full bg-rose-600 text-white hover:bg-rose-700"
+              >
+                {clearing ? "Clearing…" : "Yes, delete these records"}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={clearing}
+                onClick={() => setClearTarget(null)}
+                className="rounded-full"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        ) : null}
 
         {/* Pill navigation */}
         <div

@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuthContext";
 import { cn } from "@/lib/utils";
+import { timeOfDayGreeting } from "@/lib/greeting";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SaPageSkeleton } from "@/components/loading/PageSkeleton";
 import {
@@ -142,7 +143,7 @@ const SuperAdminDashboard = () => {
       <SaPageHeader
         eyebrow="GYGI · Command Center"
         title="Command Center"
-        subtitle={`Welcome back, ${firstName}. Live platform truth — people, money, classrooms, risk.`}
+        subtitle={`${timeOfDayGreeting()}, ${firstName}. Live platform truth — people, money, classrooms, risk.`}
         actions={
           <>
             <div className="hidden items-center gap-4 rounded-2xl bg-card px-4 py-2 text-sm font-bold text-foreground shadow-sm ring-1 ring-border sm:flex">

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  ArrowUpRight,
   Briefcase,
   Building2,
   CheckCircle2,
@@ -391,13 +392,15 @@ export default function JobMatchCard({
             target="_blank"
             rel="noreferrer"
             className={cn(
-              "mt-3 flex h-10 w-full items-center justify-center rounded-full text-sm font-bold text-white transition sm:mt-5 sm:h-12",
-              "bg-gradient-to-r from-[#c147e9] via-[#b03ad4] to-[#5B5FEF]",
-              "shadow-lg shadow-primary/30 hover:brightness-105 active:scale-[0.99]",
-              "ring-1 ring-white/40",
+              "group mt-3 flex h-11 w-full items-center justify-between rounded-full pl-5 pr-1.5 text-sm font-bold text-white transition sm:mt-5 sm:h-12",
+              "bg-black shadow-lg shadow-black/25 hover:bg-neutral-900 active:scale-[0.99]",
+              "ring-1 ring-black/10",
             )}
           >
-            Apply Now
+            <span>Apply now</span>
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 ring-1 ring-white/30 transition group-hover:translate-x-0.5 group-hover:bg-white/30">
+              <ArrowUpRight className="h-4 w-4" />
+            </span>
           </a>
         </div>
       </article>

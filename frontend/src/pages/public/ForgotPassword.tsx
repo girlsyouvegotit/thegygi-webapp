@@ -81,24 +81,24 @@ export default function ForgotPassword() {
         ]}
       >
         <div className="space-y-4">
-          <div className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3.5">
+          <div className="rounded-2xl border border-slate-100 bg-[#f4f7fb] px-4 py-3.5">
             <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#c147e9]/20 text-[#c147e9]">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#E7F1FB] text-[#1d4e89]">
                 <Mail className="h-5 w-5" />
               </span>
               <div className="min-w-0">
-                <p className="text-[10px] font-bold tracking-[0.14em] text-white/40 uppercase">
+                <p className="text-[10px] font-semibold tracking-wide text-slate-400 uppercase">
                   Sent to
                 </p>
-                <p className="truncate text-sm font-semibold text-[#e879f9]">
+                <p className="truncate text-sm font-semibold text-slate-800">
                   {email}
                 </p>
               </div>
-              <CheckCircle2 className="ml-auto h-5 w-5 shrink-0 text-emerald-400" />
+              <CheckCircle2 className="ml-auto h-5 w-5 shrink-0 text-emerald-500" />
             </div>
           </div>
 
-          <p className="text-xs leading-relaxed text-white/45">
+          <p className="text-xs leading-relaxed text-slate-500">
             Open the link in that email to choose a new password. Check spam if
             you don't see it within a few minutes.
           </p>
@@ -141,9 +141,9 @@ export default function ForgotPassword() {
       ]}
     >
       <form onSubmit={handleSubmit} className="space-y-3.5">
-        <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-black/20 px-3 py-2.5">
-          <KeyRound className="h-4 w-4 text-[#c147e9]" />
-          <p className="text-xs text-white/50">Forgot Password · GYGI security</p>
+        <div className="flex items-center gap-2 rounded-2xl bg-[#F8E4D4] px-3 py-2.5">
+          <KeyRound className="h-4 w-4 text-[#9a5b3c]" />
+          <p className="text-xs font-medium text-[#7a4a32]">Forgot Password · GYGI security</p>
         </div>
 
         <div className="space-y-1.5">
@@ -152,7 +152,7 @@ export default function ForgotPassword() {
             <Mail
               className={cn(
                 "absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors",
-                isFocused === "email" ? "text-[#c147e9]" : "text-white/35",
+                isFocused === "email" ? "text-[#3d7ab5]" : "text-slate-400",
               )}
             />
             <input
@@ -173,7 +173,7 @@ export default function ForgotPassword() {
         </div>
 
         {error ? (
-          <div className="flex items-center gap-2 rounded-xl border border-rose-400/25 bg-rose-500/10 px-3 py-2.5 text-xs text-rose-200">
+          <div className="flex items-center gap-2 rounded-2xl border border-rose-200 bg-rose-50 px-3 py-2.5 text-xs text-rose-700">
             <AlertCircle className="h-4 w-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -186,7 +186,7 @@ export default function ForgotPassword() {
         >
           {loading ? (
             <>
-              <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#1d4e89]/25 border-t-[#1d4e89]" />
               Sending...
             </>
           ) : (

@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useAuth } from "@/hooks/useAuthContext";
+import { timeOfDayGreeting } from "@/lib/greeting";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
 import {
@@ -130,7 +131,7 @@ const StudentDashboard = () => {
   const [recordings, setRecordings] = useState<recording[]>([]);
   const [progress, setProgress] = useState<studentProgress | null>(null);
   const [loading, setLoading] = useState(true);
-  const [currentHour, setCurrentHour] = useState(() => new Date().getHours());
+  const [now, setNow] = useState(() => new Date());
   const [search, setSearch] = useState("");
   const [selectedDay, setSelectedDay] = useState(() => new Date());
 
@@ -165,17 +166,22 @@ const StudentDashboard = () => {
 
   useEffect(() => {
     const timer = window.setInterval(() => {
-      setCurrentHour(new Date().getHours());
+      setNow(new Date());
     }, 60_000);
     return () => window.clearInterval(timer);
   }, []);
 
   const getGreeting = () => {
-    if (currentHour < 5) return { label: "Good night", icon: Moon };
-    if (currentHour < 12) return { label: "Good morning", icon: Sunrise };
-    if (currentHour < 17) return { label: "Good afternoon", icon: Sun };
-    if (currentHour < 21) return { label: "Good evening", icon: Sunset };
-    return { label: "Good night", icon: Moon };
+    const label = timeOfDayGreeting(now);
+    const icon =
+      label === "Good morning"
+        ? Sunrise
+        : label === "Good afternoon"
+          ? Sun
+          : label === "Good evening"
+            ? Sunset
+            : Moon;
+    return { label, icon };
   };
 
   const getFirstName = (fullName?: string): string => {
@@ -412,7 +418,7 @@ const StudentDashboard = () => {
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl lg:text-[2.1rem] font-black text-gray-900 tracking-tight leading-tight break-words">
-            Hi, {firstName}! What are your plans for today?
+            {greeting.label}, {firstName}! What are your plans for today?
           </h1>
           <p className="mt-3 text-sm text-gray-500 leading-relaxed max-w-md">
             Stay on top of live classes, assignments, quizzes, and mentorship

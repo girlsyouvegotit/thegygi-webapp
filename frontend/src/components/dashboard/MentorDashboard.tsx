@@ -20,6 +20,7 @@ import type {
   mentorAssignment,
 } from "@/types";
 import { cn } from "@/lib/utils";
+import { timeOfDayGreeting } from "@/lib/greeting";
 import {
   Users,
   Calendar,
@@ -284,7 +285,7 @@ const MentorDashboard = () => {
             </button>
             <div className="min-w-0">
               <h1 className="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">
-                Hi, {firstName}! What are your plans for today?
+                {timeOfDayGreeting()}, {firstName}! What are your plans for today?
               </h1>
               <p className="mt-2 text-sm text-slate-500 lg:mt-3 lg:leading-relaxed">
                 Stay on top of sessions, goals, and mentee progress — all in one

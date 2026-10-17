@@ -99,7 +99,7 @@ const Login = () => {
               <Mail
                 className={cn(
                   "absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors",
-                  isFocused === "email" ? "text-[#c147e9]" : "text-white/35",
+                  isFocused === "email" ? "text-[#3d7ab5]" : "text-slate-400",
                 )}
               />
               <input
@@ -121,7 +121,7 @@ const Login = () => {
               <label className={authLabelClass}>Password</label>
               <Link
                 to="/forgot-password"
-                className="text-[11px] font-semibold text-[#c147e9] hover:text-[#e879f9]"
+                className="text-xs font-semibold text-[#3d7ab5] hover:text-[#1d4e89]"
               >
                 Forgot password?
               </Link>
@@ -130,7 +130,7 @@ const Login = () => {
               <Lock
                 className={cn(
                   "absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors",
-                  isFocused === "password" ? "text-[#c147e9]" : "text-white/35",
+                  isFocused === "password" ? "text-[#3d7ab5]" : "text-slate-400",
                 )}
               />
               <input
@@ -160,7 +160,7 @@ const Login = () => {
           </div>
 
           {error ? (
-            <div className="flex items-center gap-2 rounded-xl border border-rose-400/25 bg-rose-500/10 px-3 py-2.5 text-xs text-rose-200">
+            <div className="flex items-center gap-2 rounded-2xl border border-rose-200 bg-rose-50 px-3 py-2.5 text-xs text-rose-700">
               <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -177,7 +177,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#c147e9] text-white shadow-lg shadow-primary/40 transition hover:brightness-110 disabled:opacity-50"
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#c5dff6] text-[#1d4e89] transition hover:bg-[#b7d4f0] disabled:opacity-50"
               aria-label="Sign in"
             >
               <ArrowRight className="h-5 w-5" />

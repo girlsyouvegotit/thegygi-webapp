@@ -4,6 +4,8 @@ import bcrypt from "bcryptjs";
 import User from "../../models/user.model.js";
 import { UserRole } from "../../models/user.model.js";
 import Category from "../../models/category.model.js";
+import Enrollment from "../../models/enrollment.model.js";
+import mongoose from "mongoose";
 import { addMentorToCategory } from "../../services/category.service.js";
 import { createMentorAssignment } from "../../services/mentor-assignment.service.js";
 import { logActivity } from "../../services/activity.service.js";
@@ -306,6 +308,20 @@ export const updateUser = asyncHandler(
   },
 );
 
+async function detachUserFromLearning(userId: string): Promise<void> {
+  const id = new mongoose.Types.ObjectId(userId);
+  await Promise.all([
+    Category.updateMany(
+      {},
+      { $pull: { students: id, tutors: id, mentors: id } },
+    ),
+    Enrollment.updateMany(
+      { student: id, status: "active" },
+      { status: "dropped", droppedAt: new Date() },
+    ),
+  ]);
+}
+
 export const deleteUser = asyncHandler(
   async (req: AuthRequest, res: Response): Promise<void> => {
     const user = await User.findById(req.params.id);
@@ -317,6 +333,7 @@ export const deleteUser = asyncHandler(
       throw notFound("User not found");
     }
 
+    await detachUserFromLearning(user._id.toString());
     await User.findByIdAndDelete(req.params.id);
 
     await logActivity({
@@ -340,6 +357,7 @@ export const suspendUser = asyncHandler(
       throw notFound("User not found");
     }
 
+    await detachUserFromLearning(String(req.params.id));
     const user = await User.findByIdAndUpdate(
       req.params.id,
       { isActive: false },

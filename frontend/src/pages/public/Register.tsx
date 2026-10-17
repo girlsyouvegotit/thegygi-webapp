@@ -252,14 +252,14 @@ const Register = () => {
             className={cn(
               "flex h-7 items-center gap-1.5 rounded-full px-2.5 text-[10px] font-bold uppercase tracking-wider",
               step === 1
-                ? "bg-white/10 text-white"
-                : "bg-white/[0.04] text-white/40",
+                ? "bg-[#E7F1FB] text-[#1d4e89]"
+                : "bg-slate-100 text-slate-400",
             )}
           >
             <span
               className={cn(
                 "flex h-4 w-4 items-center justify-center rounded-full text-[9px]",
-                step === 1 ? "bg-[#c147e9] text-white" : "bg-white/10",
+                step === 1 ? "bg-[#7eb0de] text-white" : "bg-slate-200 text-slate-500",
               )}
             >
               1
@@ -269,21 +269,21 @@ const Register = () => {
           <div
             className={cn(
               "h-px flex-1",
-              step >= 2 ? "bg-[#c147e9]/50" : "bg-white/10",
+              step >= 2 ? "bg-[#9ec4ea]" : "bg-slate-200",
             )}
           />
           <div
             className={cn(
               "flex h-7 items-center gap-1.5 rounded-full px-2.5 text-[10px] font-bold uppercase tracking-wider",
               step === 2
-                ? "bg-white/10 text-white"
-                : "bg-white/[0.04] text-white/40",
+                ? "bg-[#E7F1FB] text-[#1d4e89]"
+                : "bg-slate-100 text-slate-400",
             )}
           >
             <span
               className={cn(
                 "flex h-4 w-4 items-center justify-center rounded-full text-[9px]",
-                step === 2 ? "bg-[#c147e9] text-white" : "bg-white/10",
+                step === 2 ? "bg-[#7eb0de] text-white" : "bg-slate-200 text-slate-500",
               )}
             >
               2
@@ -301,7 +301,7 @@ const Register = () => {
                   <User
                     className={cn(
                       "absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2",
-                      isFocused === "name" ? "text-[#c147e9]" : "text-white/35",
+                      isFocused === "name" ? "text-[#3d7ab5]" : "text-slate-400",
                     )}
                   />
                   <input
@@ -325,8 +325,8 @@ const Register = () => {
                     className={cn(
                       "absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2",
                       isFocused === "email"
-                        ? "text-[#c147e9]"
-                        : "text-white/35",
+                        ? "text-[#3d7ab5]"
+                        : "text-slate-400",
                     )}
                   />
                   <input
@@ -351,8 +351,8 @@ const Register = () => {
                       className={cn(
                         "absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2",
                         isFocused === "password"
-                          ? "text-[#c147e9]"
-                          : "text-white/35",
+                          ? "text-[#3d7ab5]"
+                          : "text-slate-400",
                       )}
                     />
                     <input
@@ -393,8 +393,8 @@ const Register = () => {
                       className={cn(
                         "absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2",
                         isFocused === "confirm"
-                          ? "text-[#c147e9]"
-                          : "text-white/35",
+                          ? "text-[#3d7ab5]"
+                          : "text-slate-400",
                       )}
                     />
                     <input
@@ -435,7 +435,7 @@ const Register = () => {
               </div>
 
               {error ? (
-                <div className="flex items-center gap-2 rounded-xl border border-rose-400/25 bg-rose-500/10 px-3 py-2.5 text-xs text-rose-200">
+                <div className="flex items-center gap-2 rounded-2xl border border-rose-200 bg-rose-50 px-3 py-2.5 text-xs text-rose-700">
                   <AlertCircle className="h-4 w-4 shrink-0" />
                   <span>{error}</span>
                 </div>
@@ -458,24 +458,24 @@ const Register = () => {
                 </label>
 
                 {categoriesError ? (
-                  <p className="rounded-xl border border-amber-400/25 bg-amber-500/10 px-3 py-2 text-xs text-amber-100">
+                  <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
                     {categoriesError}
                   </p>
                 ) : null}
 
                 {loadingCategories ? (
                   <div className="flex items-center justify-center py-10">
-                    <div className="h-7 w-7 animate-spin rounded-full border-2 border-white/15 border-t-[#c147e9]" />
+                    <div className="h-7 w-7 animate-spin rounded-full border-2 border-slate-200 border-t-[#7eb0de]" />
                   </div>
                 ) : categories.length === 0 ? (
                   <div className="space-y-3 py-6 text-center">
-                    <p className="text-sm text-white/45">
+                    <p className="text-sm text-slate-500">
                       No categories available.
                     </p>
                     <button
                       type="button"
                       onClick={() => void fetchCategories()}
-                      className="text-sm font-semibold text-[#c147e9] hover:underline"
+                      className="text-sm font-semibold text-[#1d4e89] hover:underline"
                     >
                       Retry loading categories
                     </button>
@@ -494,30 +494,30 @@ const Register = () => {
                           className={cn(
                             "flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left transition",
                             selected
-                              ? "border-[#c147e9]/50 bg-[#c147e9]/15 ring-1 ring-[#c147e9]/30"
-                              : "border-white/10 bg-black/20 hover:border-white/20 hover:bg-black/30",
+                              ? "border-[#9ec4ea] bg-[#E7F1FB]"
+                              : "border-slate-200 bg-[#f4f7fb] hover:border-slate-300 hover:bg-white",
                           )}
                         >
                           <span
                             className={cn(
                               "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl",
                               selected
-                                ? "bg-gradient-to-br from-[#c147e9] to-[#5B5FEF] text-white"
-                                : "bg-white/8 text-[#c147e9]",
+                                ? "bg-[#c5dff6] text-[#1d4e89]"
+                                : "bg-white text-[#5b93c9]",
                             )}
                           >
                             {getCategoryIcon(category.slug)}
                           </span>
                           <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-semibold text-white">
+                            <p className="truncate text-sm font-semibold text-slate-800">
                               {category.name}
                             </p>
-                            <p className="truncate text-[11px] text-white/40">
+                            <p className="truncate text-[11px] text-slate-500">
                               {category.description}
                             </p>
                           </div>
                           {selected ? (
-                            <Check className="h-4 w-4 shrink-0 text-[#c147e9]" />
+                            <Check className="h-4 w-4 shrink-0 text-[#1d4e89]" />
                           ) : null}
                         </button>
                       );
@@ -527,7 +527,7 @@ const Register = () => {
               </div>
 
               {error ? (
-                <div className="flex items-center gap-2 rounded-xl border border-rose-400/25 bg-rose-500/10 px-3 py-2.5 text-xs text-rose-200">
+                <div className="flex items-center gap-2 rounded-2xl border border-rose-200 bg-rose-50 px-3 py-2.5 text-xs text-rose-700">
                   <AlertCircle className="h-4 w-4 shrink-0" />
                   <span>{error}</span>
                 </div>
@@ -537,7 +537,7 @@ const Register = () => {
                 <button
                   type="button"
                   onClick={handleBackStep}
-                  className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/[0.04] px-4 py-3.5 text-sm font-bold text-white/80 transition hover:bg-white/[0.08]"
+                  className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-3.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
                 >
                   <ArrowLeft className="h-4 w-4" />
                   Back

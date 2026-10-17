@@ -18,9 +18,6 @@ import {
   Search,
   Bell,
   MessageCircle,
-  Maximize2,
-  Minus,
-  Plus as PlusIcon,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { RoleDashboardSkeleton } from "@/components/loading/PageSkeleton";
@@ -30,6 +27,7 @@ import { useAuth } from "@/hooks/useAuthContext";
 import { useAdminPath } from "@/hooks/useAdminPath";
 import type { adminOverview } from "@/types";
 import { cn } from "@/lib/utils";
+import { timeOfDayGreeting } from "@/lib/greeting";
 import { withMediaCacheBust } from "@/lib/profileMedia";
 import RecentActivityFeed from "@/components/activities/RecentActivityFeed";
 import {
@@ -113,6 +111,47 @@ export default function AdminDashboard() {
     );
     return raw;
   }, [overview]);
+
+  const networkNodes = [
+    {
+      label: "Students",
+      value: overview?.totalStudents || 0,
+      color: "#e879f9",
+      glow: "rgba(232,121,249,0.45)",
+      x: 18,
+      y: 30,
+      url: toAdmin("users?role=student"),
+    },
+    {
+      label: "Tutors",
+      value: overview?.totalTutors || 0,
+      color: "#a78bfa",
+      glow: "rgba(167,139,250,0.45)",
+      x: 82,
+      y: 26,
+      url: toAdmin("users"),
+    },
+    {
+      label: "Mentors",
+      value: overview?.totalMentors || 0,
+      color: "#67e8f9",
+      glow: "rgba(103,232,249,0.4)",
+      x: 22,
+      y: 76,
+      url: toAdmin("mentorship"),
+    },
+    {
+      label: "Admins",
+      value: overview?.totalAdmins || 0,
+      color: "#fcd34d",
+      glow: "rgba(252,211,77,0.4)",
+      x: 80,
+      y: 74,
+      url: toAdmin("users?role=admin"),
+    },
+  ];
+  const networkPeople = networkNodes.reduce((sum, node) => sum + node.value, 0);
+  const networkBase = networkPeople || 1;
 
   const metricCards = [
     {
@@ -215,7 +254,7 @@ export default function AdminDashboard() {
       <header className="mb-5 flex flex-col gap-4 sm:mb-6 xl:flex-row xl:items-center xl:justify-between">
         <div className="min-w-0">
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-            Welcome back, {getFirstName(user?.name)}!
+            {timeOfDayGreeting()}, {getFirstName(user?.name)}!
           </h1>
           <p className="mt-1 text-xs leading-relaxed text-slate-500 sm:text-sm">
             You have{" "}
@@ -628,10 +667,10 @@ export default function AdminDashboard() {
           </section>
         </div>
 
-        {/* Right column — map overview style */}
+        {/* Right column — live network */}
         <div className="xl:col-span-4 flex flex-col gap-4 min-w-0">
           <section className="rounded-[1.75rem] bg-white border border-slate-200/70 shadow-sm p-4 sm:p-5 min-w-0 flex-1 relative overflow-hidden">
-            <div className="flex items-center justify-between mb-3">
+            <div className="mb-3 flex items-start justify-between gap-3">
               <div>
                 <h3 className="text-sm font-black text-slate-900">
                   Network overview
@@ -640,88 +679,112 @@ export default function AdminDashboard() {
                   Users across categories
                 </p>
               </div>
-              <div className="flex gap-1">
-                <span className="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center">
-                  <Minus className="w-3.5 h-3.5" />
-                </span>
-                <span className="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center">
-                  <PlusIcon className="w-3.5 h-3.5" />
-                </span>
-                <span className="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center">
-                  <Maximize2 className="w-3.5 h-3.5" />
-                </span>
-              </div>
-            </div>
-
-            {/* Stylized map */}
-            <div className="relative rounded-[1.35rem] bg-[#F3F4F6] h-[260px] sm:h-[320px] overflow-hidden">
-              <div
-                className="absolute inset-0 opacity-50"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(#e5e7eb 1px, transparent 1px), linear-gradient(90deg, #e5e7eb 1px, transparent 1px)",
-                  backgroundSize: "28px 28px",
-                }}
-              />
-              <svg
-                className="absolute inset-0 w-full h-full"
-                viewBox="0 0 300 320"
-                preserveAspectRatio="xMidYMid slice"
-              >
-                <path
-                  d="M 60 260 C 100 180, 140 220, 160 140 S 220 100, 250 70"
-                  fill="none"
-                  stroke="#c147e9"
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                />
-                <circle cx="60" cy="260" r="8" fill="#c147e9" />
-                <circle cx="250" cy="70" r="8" fill="#1e1b4b" />
-                <polygon points="200,95 230,78 210,115" fill="#6366f1" />
-              </svg>
-
-              <div className="absolute left-3 bottom-3 rounded-2xl bg-white/95 backdrop-blur px-3 py-2 shadow-sm">
-                <p className="text-[10px] text-slate-400 font-bold uppercase">
-                  Coverage
-                </p>
-                <p className="text-sm font-black text-slate-900 tabular-nums">
-                  {totalUsers}
-                  <span className="text-xs font-semibold text-slate-400">
-                    {" "}
-                    / {(overview?.totalCategories || 0) || 1} cats
-                  </span>
-                </p>
-              </div>
-
-              <div className="absolute right-3 top-3 rounded-full bg-primary text-white text-[10px] font-bold px-3 py-1.5 shadow">
-                Students → Mentors
-              </div>
-            </div>
-
-            <div className="mt-4 grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => navigate(toAdmin("users?role=student"))}
-                className="rounded-2xl bg-[#F7F5FB] p-3 text-left hover:bg-primary/10 transition-colors"
-              >
-                <Users className="w-4 h-4 text-primary mb-1" />
-                <p className="text-lg font-black text-slate-900 tabular-nums">
-                  {overview?.totalStudents || 0}
-                </p>
-                <p className="text-[10px] text-slate-500 font-medium">Students</p>
-              </button>
               <button
                 type="button"
                 onClick={() => navigate(toAdmin("categories"))}
-                className="rounded-2xl bg-[#F7F5FB] p-3 text-left hover:bg-primary/10 transition-colors"
+                className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-bold text-primary"
               >
-                <FolderTree className="w-4 h-4 text-primary mb-1" />
-                <p className="text-lg font-black text-slate-900 tabular-nums">
-                  {overview?.totalCategories || 0}
-                </p>
-                <p className="text-[10px] text-slate-500 font-medium">Categories</p>
+                {overview?.totalCategories || 0} categories
+                <ArrowUpRight className="h-3 w-3" />
               </button>
             </div>
+
+            <div className="relative h-[250px] overflow-hidden rounded-[1.35rem] bg-[#140c22] sm:h-[280px]">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#c147e9]/30 blur-3xl"
+              />
+              <svg
+                className="absolute inset-0 h-full w-full"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
+                aria-hidden
+              >
+                <ellipse
+                  cx="50"
+                  cy="50"
+                  rx="34"
+                  ry="30"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.16)"
+                  strokeDasharray="2 2"
+                />
+                {networkNodes.map((node) => (
+                  <line
+                    key={node.label}
+                    x1="50"
+                    y1="50"
+                    x2={node.x}
+                    y2={node.y}
+                    stroke={node.color}
+                    strokeOpacity="0.7"
+                    strokeWidth="0.55"
+                  />
+                ))}
+              </svg>
+              <button
+                type="button"
+                onClick={() => navigate(toAdmin("users"))}
+                className="absolute left-1/2 top-1/2 z-10 flex h-[4.5rem] w-[4.5rem] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border border-white/20 bg-white/10 text-white shadow-[0_0_40px_rgba(193,71,233,0.5)] backdrop-blur-md transition hover:bg-white/20"
+              >
+                <span className="text-2xl font-black tabular-nums leading-none">
+                  {networkPeople}
+                </span>
+                <span className="mt-0.5 text-[9px] font-bold tracking-[0.14em] text-white/70 uppercase">
+                  People
+                </span>
+              </button>
+              {networkNodes.map((node) => (
+                <button
+                  key={node.label}
+                  type="button"
+                  onClick={() => navigate(node.url)}
+                  className="absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-white/15 bg-white/10 px-2.5 py-1.5 text-left text-white backdrop-blur-md transition hover:bg-white/20"
+                  style={{
+                    left: `${node.x}%`,
+                    top: `${node.y}%`,
+                    boxShadow: `0 10px 28px ${node.glow}`,
+                  }}
+                >
+                  <p className="text-sm font-black tabular-nums leading-none">
+                    {node.value}
+                  </p>
+                  <p className="mt-0.5 text-[9px] font-semibold text-white/75">
+                    {node.label}
+                  </p>
+                </button>
+              ))}
+            </div>
+
+            <ul className="mt-4 space-y-2.5">
+              {networkNodes.map((node) => {
+                const pct = Math.round((node.value / networkBase) * 100);
+                return (
+                  <li key={node.label}>
+                    <div className="mb-1 flex items-center justify-between text-[11px]">
+                      <span className="font-semibold text-slate-600">
+                        {node.label}
+                      </span>
+                      <span className="font-black tabular-nums text-slate-900">
+                        {node.value}
+                        <span className="ml-1 font-semibold text-slate-400">
+                          {pct}%
+                        </span>
+                      </span>
+                    </div>
+                    <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
+                      <div
+                        className="h-full rounded-full"
+                        style={{
+                          width: `${networkPeople ? pct : 0}%`,
+                          backgroundColor: node.color,
+                        }}
+                      />
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
           </section>
         </div>
 
@@ -776,13 +839,17 @@ export default function AdminDashboard() {
               </p>
             </div>
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
             {quickActions.map((action) => (
               <button
                 key={action.label}
                 type="button"
                 onClick={() => navigate(action.url)}
-                className="group flex flex-col items-start gap-3 p-4 rounded-2xl border border-slate-200/60 bg-[#FAFAFC] hover:border-primary/30 hover:shadow-sm transition-all text-left min-w-0"
+                className={cn(
+                  "group flex flex-col items-start gap-3 p-4 rounded-2xl border border-slate-200/60 bg-[#FAFAFC] hover:border-primary/30 hover:shadow-sm transition-all text-left min-w-0",
+                  action.label === "Student Performance" &&
+                    "col-span-2 lg:col-span-1",
+                )}
               >
                 <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                   <action.icon className="w-5 h-5" />

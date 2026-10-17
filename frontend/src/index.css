@@ -222,6 +222,18 @@ html.dark [data-dashboard-theme] .bg-\[\#F2F2F4\],
 html.dark [data-dashboard-theme] .bg-\[\#F3F2F8\],
 html.dark [data-dashboard-theme] .bg-\[\#F5F4FA\],
 html.dark [data-dashboard-theme] .bg-\[\#F7F6FB\],
+html.dark [data-dashboard-theme] .bg-\[\#F7F5FB\],
+html.dark [data-dashboard-theme] .bg-\[\#FAFAFC\],
+html.dark [data-dashboard-theme] .bg-\[\#F7F8F9\],
+html.dark [data-dashboard-theme] .bg-\[\#EEF0F3\],
+html.dark [data-dashboard-theme] .bg-\[\#FDE8EF\],
+html.dark [data-dashboard-theme] .bg-\[\#E8F3F1\],
+html.dark [data-dashboard-theme] .bg-\[\#E0F2FE\],
+html.dark [data-dashboard-theme] .bg-\[\#E8EEFB\],
+html.dark [data-dashboard-theme] .bg-\[\#FFE8D6\],
+html.dark [data-dashboard-theme] .bg-\[\#F3E8FF\],
+html.dark [data-dashboard-theme] .bg-\[\#FEF3C7\],
+html.dark [data-dashboard-theme] .bg-\[\#ECFDF5\],
 html.dark [data-dashboard-theme] .bg-\[\#EEEDF5\],
 html.dark [data-dashboard-theme] .bg-\[\#eeedf5\],
 html.dark [data-dashboard-theme] .bg-\[\#e4e2f0\],
@@ -233,7 +245,15 @@ html.dark [data-dashboard-theme] .bg-emerald-50,
 html.dark [data-dashboard-theme] .bg-amber-50,
 html.dark [data-dashboard-theme] .bg-rose-50,
 html.dark [data-dashboard-theme] .bg-rose-50\/40 {
-  background-color: var(--muted);
+  background-color: var(--muted) !important;
+}
+html.dark [data-dashboard-theme] .bg-white\/70,
+html.dark [data-dashboard-theme] .bg-white\/80 {
+  background-color: color-mix(in srgb, var(--foreground) 10%, var(--card));
+}
+html.dark [data-dashboard-theme] .text-teal-800,
+html.dark [data-dashboard-theme] .text-teal-700 {
+  color: #5eead4 !important;
 }
 html.dark [data-dashboard-theme] .text-slate-900,
 html.dark [data-dashboard-theme] .text-gray-900,
@@ -265,6 +285,8 @@ html.dark [data-dashboard-theme] .border-slate-100,
 html.dark [data-dashboard-theme] .border-slate-100\/70,
 html.dark [data-dashboard-theme] .border-slate-100\/80,
 html.dark [data-dashboard-theme] .border-slate-200,
+html.dark [data-dashboard-theme] .border-slate-200\/60,
+html.dark [data-dashboard-theme] .border-slate-200\/70,
 html.dark [data-dashboard-theme] .border-slate-200\/90,
 html.dark [data-dashboard-theme] .border-gray-200,
 html.dark [data-dashboard-theme] .border-slate-300,
@@ -283,13 +305,13 @@ html.dark [data-dashboard-theme] .stroke-\[\#EEEDF5\] {
   stroke: var(--muted);
 }
 
-/* Auth glass fields — defeat browser autofill white wash */
+/* Auth fields — keep autofill on the light card surface */
 .gygi-auth-field:-webkit-autofill,
 .gygi-auth-field:-webkit-autofill:hover,
 .gygi-auth-field:-webkit-autofill:focus {
-  -webkit-text-fill-color: #ffffff !important;
-  caret-color: #ffffff;
-  box-shadow: 0 0 0 1000px rgba(8, 6, 16, 0.72) inset !important;
+  -webkit-text-fill-color: #1e293b !important;
+  caret-color: #1e293b;
+  box-shadow: 0 0 0 1000px #f4f7fb inset !important;
   transition: background-color 99999s ease-out 0s;
 }
 

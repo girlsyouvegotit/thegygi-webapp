@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { api } from "@/lib/api";
+import { timeOfDayGreeting } from "@/lib/greeting";
 import {
   FileText,
   PenLine,
@@ -210,7 +211,8 @@ const WriterDashboard = () => {
             Writing workspace
           </p>
           <h1 className="mt-1 text-2xl font-black tracking-tight text-[#1E1B4B] sm:text-3xl">
-            Welcome back{user?.name ? `, ${user.name.split(" ")[0]}` : ""}
+            {timeOfDayGreeting()}
+            {user?.name ? `, ${user.name.split(" ")[0]}` : ""}
           </h1>
         </div>
         <div className="grid w-full grid-cols-1 gap-3 min-[400px]:grid-cols-2 sm:w-auto sm:shrink-0">

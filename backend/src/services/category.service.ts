@@ -2,6 +2,7 @@ import Category from "../models/category.model.js";
 import Community from "../models/community.model.js";
 import User from "../models/user.model.js";
 import LiveClass from "../models/live-class.model.js";
+import Enrollment from "../models/enrollment.model.js";
 import { generateUniqueSlug } from "../utils/slug.util.js";
 import type { ICategory } from "../models/category.model.js";
 import mongoose from "mongoose";
@@ -163,6 +164,24 @@ const buildMembershipMaps = async () => {
     ensure(tutorsByCategory, String(cls.category)).add(String(cls.tutor));
   }
 
+  const activeStudentIds = staff
+    .filter((user) => user.role === "student")
+    .map((user) => user._id);
+  if (activeStudentIds.length > 0) {
+    const enrollments = await Enrollment.find({
+      status: "active",
+      student: { $in: activeStudentIds },
+    })
+      .select("student category")
+      .lean();
+    for (const enrollment of enrollments) {
+      if (!enrollment.category || !enrollment.student) continue;
+      ensure(studentsByCategory, String(enrollment.category)).add(
+        String(enrollment.student),
+      );
+    }
+  }
+
   return { tutorsByCategory, mentorsByCategory, studentsByCategory };
 };
 
@@ -185,8 +204,9 @@ const computeCounts = (
   const mentorIds = toIdSet(category.mentors);
   for (const id of mentorsByCategory.get(catId) || []) mentorIds.add(id);
 
-  const studentIds = toIdSet(category.students);
-  for (const id of studentsByCategory.get(catId) || []) studentIds.add(id);
+  // Only currently active students. Stale ids left on Category.students
+  // after a delete used to freeze the count.
+  const studentIds = new Set(studentsByCategory.get(catId) || []);
 
   return {
     tutorIds,

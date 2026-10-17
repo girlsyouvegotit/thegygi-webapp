@@ -1,5 +1,7 @@
 import type { Response } from "express";
 import Fee from "../../models/fee.model.js";
+import Expense from "../../models/expense.model.js";
+import Salary from "../../models/salary.model.js";
 import User from "../../models/user.model.js";
 import { logActivity } from "../../services/activity.service.js";
 import type { AuthRequest } from "../../middleware/auth.middleware.js";
@@ -106,6 +108,52 @@ export const updateFee = asyncHandler(
     });
 
     res.json({ success: true, message: "Fee updated", data: { fee } });
+  },
+);
+
+const FINANCE_SECTIONS = ["fees", "expenses", "salaries", "all"] as const;
+type FinanceSection = (typeof FINANCE_SECTIONS)[number];
+
+export const clearFinanceRecords = asyncHandler(
+  async (req: AuthRequest, res: Response): Promise<void> => {
+    const section = req.body?.section as FinanceSection;
+    if (!FINANCE_SECTIONS.includes(section)) {
+      throw badRequest("Choose fees, expenses, salaries, or all");
+    }
+
+    const targets: FinanceSection[] =
+      section === "all" ? ["fees", "expenses", "salaries"] : [section];
+    const removed: Record<string, number> = {};
+
+    for (const target of targets) {
+      const result =
+        target === "fees"
+          ? await Fee.deleteMany({})
+          : target === "expenses"
+            ? await Expense.deleteMany({})
+            : await Salary.deleteMany({});
+      removed[target] = result.deletedCount ?? 0;
+    }
+
+    const total = Object.values(removed).reduce((sum, n) => sum + n, 0);
+    await logActivity({
+      userId: req.user!._id.toString(),
+      action: "Cleared finance records",
+      details: `Cleared ${section}. Removed ${total} record${total === 1 ? "" : "s"}.`,
+      resourceType: "finance",
+      metadata: { section, removed },
+      isAudit: true,
+      req,
+    });
+
+    res.json({
+      success: true,
+      message:
+        total === 0
+          ? "Nothing to clear"
+          : `Cleared ${total} finance record${total === 1 ? "" : "s"}`,
+      data: { section, removed },
+    });
   },
 );
 

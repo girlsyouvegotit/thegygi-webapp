@@ -5,7 +5,6 @@ import CommunityMessage from "../models/community-message.model.js";
 import MentorAssignment from "../models/mentor-assignment.model.js";
 import LiveClass from "../models/live-class.model.js";
 import LiveSession from "../models/live-session.model.js";
-import Enrollment from "../models/enrollment.model.js";
 import {
   getOnlineUserCount,
   getOnlineUserIds,
@@ -74,9 +73,6 @@ export const getCommunityPulse = async (
     messageMatch.community = { $in: communityIds };
   }
 
-  const enrollmentMatch: Record<string, unknown> = { status: "active" };
-  if (categoryFilter) enrollmentMatch.category = categoryFilter;
-
   const liveClassMatch: Record<string, unknown> = { status: "live" };
   if (categoryFilter) liveClassMatch.category = categoryFilter;
 
@@ -88,7 +84,6 @@ export const getCommunityPulse = async (
 
   const [
     totalStudentsByRole,
-    enrolledStudentIds,
     categories,
     recentUsers,
     liveClasses,
@@ -98,12 +93,12 @@ export const getCommunityPulse = async (
     channelActivity,
   ] = await Promise.all([
     categoryFilter
-      ? Enrollment.distinct("student", enrollmentMatch).then((ids) => ids.length)
+      ? User.countDocuments({
+          role: "student",
+          isActive: { $ne: false },
+          categories: categoryFilter,
+        })
       : User.countDocuments({ role: "student", isActive: { $ne: false } }),
-
-    categoryFilter
-      ? Promise.resolve([] as mongoose.Types.ObjectId[])
-      : Enrollment.distinct("student", { status: "active" }),
 
     Category.find({ isActive: { $ne: false } }).select("name").sort({ name: 1 }).lean(),
 
@@ -148,10 +143,7 @@ export const getCommunityPulse = async (
     ]),
   ]);
 
-  const totalStudents = Math.max(
-    totalStudentsByRole,
-    Array.isArray(enrolledStudentIds) ? enrolledStudentIds.length : 0,
-  );
+  const totalStudents = totalStudentsByRole;
 
   // Live participants currently in sessions (no leftAt)
   let liveClassParticipants = 0;

@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/hooks/useAuthContext";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
+import { timeOfDayGreeting } from "@/lib/greeting";
 import {
   Users,
   Calendar,
@@ -141,7 +142,7 @@ const MentorDashboard = () => {
         <div>
           <h1 className="text-3xl font-bold">Mentor Dashboard</h1>
           <p className="text-muted-foreground mt-1">
-            Welcome back, {user?.name}
+            {timeOfDayGreeting()}, {user?.name}
           </p>
         </div>
         <Button onClick={() => navigate("/mentor/sessions/new")}>

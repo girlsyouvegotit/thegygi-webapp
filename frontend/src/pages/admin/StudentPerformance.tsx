@@ -218,7 +218,10 @@ const StudentPerformance = () => {
           {summaryCards.map((card) => (
             <div
               key={card.label}
-              className="min-w-0 rounded-2xl border border-border/60 bg-card/80 p-3 shadow-sm backdrop-blur sm:p-4"
+              className={cn(
+                "min-w-0 rounded-2xl border border-border/60 bg-card/80 p-3 shadow-sm backdrop-blur sm:p-4",
+                card.label === "Avg assignment" && "col-span-2 sm:col-span-1",
+              )}
             >
               <div
                 className={cn(

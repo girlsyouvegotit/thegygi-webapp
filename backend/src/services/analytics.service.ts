@@ -221,13 +221,11 @@ export const getMentorAnalytics = async (mentorId: string) => {
 };
 
 export const getAdminOverview = async () => {
-  // Treat missing isActive as active (legacy docs), and use the larger of
-  // role-based users vs active enrollments so dashboard counts stay accurate.
+  // Count living student accounts only. Enrollment rows can outlive a deleted user.
   const activeUser = { isActive: { $ne: false } };
 
   const [
     studentsByRole,
-    enrolledStudentIds,
     totalTutors,
     totalMentors,
     totalWriters,
@@ -238,7 +236,6 @@ export const getAdminOverview = async () => {
     activeMentorships,
   ] = await Promise.all([
     User.countDocuments({ role: "student", ...activeUser }),
-    Enrollment.distinct("student", { status: "active" }),
     User.countDocuments({ role: "tutor", ...activeUser }),
     User.countDocuments({ role: "mentor", ...activeUser }),
     User.countDocuments({ role: "writer", ...activeUser }),
@@ -249,7 +246,7 @@ export const getAdminOverview = async () => {
     MentorAssignment.countDocuments({ isActive: true }),
   ]);
 
-  const totalStudents = Math.max(studentsByRole, enrolledStudentIds.length);
+  const totalStudents = studentsByRole;
 
   return {
     totalStudents,
