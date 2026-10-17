@@ -155,13 +155,18 @@ const Finance = () => {
       setClearTarget(null);
       await fetchOverview();
     } catch (error: unknown) {
-      const message =
+      const apiMessage =
         error &&
         typeof error === "object" &&
-        "response" in error &&
-        (error as { response?: { data?: { message?: string } } }).response?.data
-          ?.message;
-      toast.error(message || "Could not clear finance records");
+        "response" in error
+          ? (error as { response?: { data?: { message?: unknown } } }).response
+              ?.data?.message
+          : undefined;
+      toast.error(
+        typeof apiMessage === "string" && apiMessage
+          ? apiMessage
+          : "Could not clear finance records",
+      );
     } finally {
       setClearing(false);
     }
