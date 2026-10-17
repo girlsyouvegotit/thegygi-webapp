@@ -99,7 +99,7 @@ function partnerInitials(name: string) {
 const FALLBACK_TEAM = [
   {
     name: "Teniade",
-    role: "CEO",
+    role: "Pioneer",
     bio: "Leads GYGI’s vision for free, excellent education.",
     image: "/CEO.jpg",
   },
@@ -405,16 +405,24 @@ const About = () => {
                         className="h-11 w-11 rounded-full object-cover ring-2 ring-muted"
                       />
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-bold">
-                          {m.name}
-                        </p>
-                        <p className="truncate text-xs text-muted-foreground">
-                          {m.role}
-                        </p>
+                        {m.name === "Teniade" ? (
+                          <p className="text-[12px] font-medium uppercase tracking-[0.22em] text-foreground">
+                            {m.role || "Pioneer"}
+                          </p>
+                        ) : (
+                          <>
+                            <p className="truncate text-sm font-bold">{m.name}</p>
+                            <p className="truncate text-xs text-muted-foreground">
+                              {m.role}
+                            </p>
+                          </>
+                        )}
                       </div>
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground">
-                        <ArrowUpRight className="h-3.5 w-3.5" />
-                      </span>
+                      {m.name !== "Teniade" && (
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground">
+                          <ArrowUpRight className="h-3.5 w-3.5" />
+                        </span>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -432,18 +440,15 @@ const About = () => {
                   />
                   <img
                     src={members[0]?.image || "/CEO.jpg"}
-                    alt={members[0]?.name || "Teniade"}
+                    alt={members[0]?.role || "Pioneer"}
                     className="relative aspect-[4/5] w-full object-cover object-top"
                     loading="lazy"
                   />
                 </div>
-                <div className="absolute -bottom-3 -left-3 h-14 w-14 rounded-2xl bg-primary shadow-lg sm:h-16 sm:w-16" />
-                <div className={cn(softCard, "absolute right-4 bottom-4 p-3 sm:right-6 sm:bottom-6")}>
-                  <p className="text-sm font-black">
-                    {members[0]?.name || "Teniade"}
-                  </p>
-                  <p className="text-xs font-semibold text-primary">
-                    {members[0]?.role || "CEO"}
+                <div className="absolute inset-x-4 bottom-4 flex items-center gap-3 rounded-2xl border border-white/70 bg-white/95 px-4 py-3 shadow-[0_10px_30px_rgba(15,23,42,0.12)] backdrop-blur-md sm:inset-x-6 dark:border-white/10 dark:bg-[#1c1826]/95">
+                  <span className="h-6 w-px shrink-0 bg-slate-900 dark:bg-white" aria-hidden />
+                  <p className="text-[12px] font-medium uppercase tracking-[0.22em] text-slate-900 dark:text-white">
+                    {members[0]?.role || "Pioneer"}
                   </p>
                 </div>
               </div>

@@ -48,12 +48,17 @@ export async function ensureContentSeeded(): Promise<void> {
       {
         $set: {
           "sections.team.members.$[m].name": "Teniade",
-          "sections.team.members.$[m].role": "CEO",
+          "sections.team.members.$[m].role": "Pioneer",
           "sections.team.members.$[m].bio":
             "Leads GYGI’s vision for free, excellent education and steers program quality across the platform.",
         },
       },
       { arrayFilters: [{ "m.name": "Kemi" }] },
+    );
+    await AboutPage.updateMany(
+      { "sections.team.members.name": "Teniade" },
+      { $set: { "sections.team.members.$[m].role": "Pioneer" } },
+      { arrayFilters: [{ "m.name": "Teniade", "m.role": "CEO" }] },
     );
   }
 }

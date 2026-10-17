@@ -101,7 +101,7 @@ export const defaultAboutSections = (): AboutSections => ({
     members: [
       {
         name: "Teniade",
-        role: "CEO",
+        role: "Pioneer",
         bio: "Leads GYGI’s vision for free, excellent education and steers program quality across the platform.",
         image: "/CEO.jpg",
       },
